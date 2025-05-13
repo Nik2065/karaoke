@@ -1,0 +1,23 @@
+[Unit]
+# Описание
+Description=KaraokeSiteToDeploy
+ 
+[Service]
+# Каталог с файлами приложения
+WorkingDirectory=/var/www/karaoke/http/
+# Команда запуска процесса
+ExecStart=/usr/bin/dotnet /var/www/karaoke/http/KaraokeWebApp3.dll
+# Перезапускать всегда
+Restart=always
+# При аварийном завершении процесса перезапускаем его через 10 секунд
+RestartSec=10
+KillSignal=SIGINT
+# Идентификатор
+SyslogIdentifier=karaoke_site
+# Пользователь для запуска
+User=www-data
+# Имя окружения для приложения
+Environment=ASPNETCORE_ENVIRONMENT=Production
+ 
+[Install]
+WantedBy=multi-user.target

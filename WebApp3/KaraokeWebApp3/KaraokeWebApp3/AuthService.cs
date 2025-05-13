@@ -32,7 +32,19 @@ namespace KaraokeWebApp3
             return true;
         }
 
+
+
+
         public async Task<User> Authenticate(string username, string password)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null) return null;
+
+            var result = _hasher.VerifyHashedPassword(null, user.PasswordHash, password);
+            return result == PasswordVerificationResult.Success ? user : null;
+        }
+
+        public async Task<User> AuthenticateManager(string username, string password)
         {
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return null;
