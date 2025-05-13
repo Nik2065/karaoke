@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,9 +8,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    [Table("users")]
+    /*[Table("users")]
     public class User
     {
         public int Id { get; set; }
-    }
+    }*/
+
+    public class User : IdentityUser { }
 }

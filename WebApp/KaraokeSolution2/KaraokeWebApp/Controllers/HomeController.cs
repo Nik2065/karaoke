@@ -12,10 +12,10 @@ namespace KaraokeWebApp.Controllers
         public HomeController(ILogger<HomeController> logger, IConfiguration conf)
         {
             _logger = logger;
-            db = new DataContext(conf);
+            db = new AppDbContext(conf);
         }
 
-        private DataContext db;
+        private AppDbContext db;
         
 
         public IActionResult Index()
@@ -44,10 +44,7 @@ namespace KaraokeWebApp.Controllers
         }
 
 
-        public IActionResult SignInAsManager()
-        {
-            return View();
-        }
+
 
         public IActionResult StartPage()
         {
