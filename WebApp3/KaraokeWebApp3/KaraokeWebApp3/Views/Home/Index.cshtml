@@ -1,9 +1,257 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
     Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karaoke Night - Афиша</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-banner {
+            /*background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://source.unsplash.com/random/1920x1080/?karaoke') center/cover;*/
+            /*background: url('~/wwwroot/img/main.webp') center/cover;*/
+            background: url('/img/main.jpg') center/cover;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .event-card {
+            transition: transform 0.3s;
+            /*background: rgba(255,255,255,0.1);*/
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+            .event-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .promo-banner {
+            background: #ff3366;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Karaoke Night</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!--li class="nav-item"><a class="nav-link" href="#">События</a></!--li>
+                    <li-- class="nav-item"><a class="nav-link" href="#">Меню</a></li-->
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для клиента</a></li>
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для клиента</a></li>
+
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("RegisterForManager", "Account")'>Регистрация для менеджера</a></li>
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("LoginForManager", "Account")'>Вход для менеджера</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный баннер -->
+    <div class="hero-banner">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Лучшие караоке-вечера в городе!</h1>
+            <p class="lead mb-4">Более 50,000 песен на любой вкус</p>
+            <a class="btn btn-danger btn-lg px-5" href='@Url.Action("Login", "Account")'>
+                Забронировать стол через личный кабинет клиента
+            </a>
+        </div>
+    </div>
+
+    <!-- Секция событий -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Ближайшие события</h2>
+
+            <div class="row g-4">
+                <!-- Карточка события 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-card text-dark p-4 rounded-3 position-relative">
+                        <span class="discount-badge bg-danger text-white px-3 py-1 rounded-pill">-20%</span>
+                        <img src="/img/90h.jpg" class="img-fluid rounded-3 mb-3">
+                        <h3>Ретро-вечер 90-х</h3>
+                        <p class="text-muted">25 июня 2024 | 19:00</p>
+                        <p>Окунитесь в атмосферу 90-х с лучшими хитами десятилетия!</p>
+                        <button class="btn btn-outline-dark">Подробнее</button>
+                    </div>
+                </div>
+
+                <!-- Карточка события 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-card text-dark p-4 rounded-3">
+                        <img src="/img/k-pop.jpg" class="img-fluid rounded-3 mb-3">
+                        <h3>K-Pop Night</h3>
+                        <p class="text-muted">28 июня 2024 | 20:00</p>
+                        <p>Все самые популярные корейские хиты в одном вечере!</p>
+                        <button class="btn btn-outline-dark">Подробнее</button>
+                    </div>
+                </div>
+
+                <!-- Рекламный баннер -->
+                <div class="col-md-12 col-lg-4">
+                    <div class="promo-banner text-white p-4 h-100">
+                        <h3>Акция!</h3>
+                        <p>Приведи 3 друзей и получи скидку 30% на весь вечер!</p>
+                        <div class="bg-white text-dark p-3 rounded-3 mb-3">
+                            <small>Используй промокод:</small>
+                            <div class="fw-bold">FRIENDS30</div>
+                        </div>
+                        <button class="btn btn-light">Условия акции</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Рекламные баннеры -->
+    <section class="py-5 bg-black">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="bg-white text-dark p-4 rounded-3 text-center">
+                        <h4>Happy Hours</h4>
+                        <p>С 16:00 до 19:00 скидка 40% на все напитки</p>
+                        <img src="/img/drinks.jpg" class="img-fluid rounded-3">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-danger text-white p-4 rounded-3 text-center">
+                        <h4>Новая система бронирования</h4>
+                        <p>Забронируйте стол онлайн и получите бонусный напиток</p>
+                        <button class="btn btn-light">Перейти к бронированию</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Добавить это перед закрывающим тегом </body> -->
+    <!-- Модальное окно бронирования -->
+    <div class="modal fade" id="bookingModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Бронирование стола</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="bookingForm" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <!-- Имя -->
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Ваше имя</label>
+                                <input type="text" class="form-control bg-black text-light" id="name" required>
+                                <div class="invalid-feedback">
+                                    Пожалуйста, введите ваше имя
+                                </div>
+                            </div>
+
+                            <!-- Телефон -->
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Телефон</label>
+                                <input type="tel" class="form-control bg-black text-light" id="phone"
+                                       pattern="\+?[0-9\s\-\(\)]+" required>
+                                <div class="invalid-feedback">
+                                    Введите корректный номер телефона
+                                </div>
+                            </div>
+
+                            <!-- Дата и время -->
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">Дата</label>
+                                <input type="date" class="form-control bg-black text-light" id="date" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="time" class="form-label">Время</label>
+                                <select class="form-select bg-black text-light" id="time" required>
+                                    <option value="">Выберите время</option>
+                                    <option>19:00</option>
+                                    <option>20:00</option>
+                                    <option>21:00</option>
+                                    <option>22:00</option>
+                                    <option>23:00</option>
+                                </select>
+                            </div>
+
+                            <!-- Количество гостей -->
+                            <div class="col-12">
+                                <label for="guests" class="form-label">Количество гостей</label>
+                                <select class="form-select bg-black text-light" id="guests" required>
+                                    <option value="">Выберите количество</option>
+                                    <option>1-2</option>
+                                    <option>3-4</option>
+                                    <option>5-6</option>
+                                    <option>7-8</option>
+                                    <option>8+</option>
+                                </select>
+                            </div>
+
+                            <!-- Дополнительные пожелания -->
+                            <div class="col-12">
+                                <label for="comments" class="form-label">Дополнительные пожелания</label>
+                                <textarea class="form-control bg-black text-light"
+                                          id="comments" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" form="bookingForm" class="btn btn-danger">Отправить заявку</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Добавить этот скрипт перед закрывающим тегом </body> после подключения Bootstrap -->
+    <script>
+        // Валидация формы
+        (() => {
+            'use strict'
+
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+</body>
+</html>
+

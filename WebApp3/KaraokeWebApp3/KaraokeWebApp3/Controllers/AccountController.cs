@@ -18,15 +18,16 @@ namespace KaraokeWebApp3.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string phone, string password)
         {
-            var user = await _authService.Authenticate(username, password);
+            var user = await _authService.Authenticate(phone, password);
             if (user == null) return View();
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, "Client")
             };
 
             var identity = new ClaimsIdentity(claims,
@@ -36,7 +37,7 @@ namespace KaraokeWebApp3.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("HomeForClient", "Home");
         }
 
         [HttpGet]
@@ -51,13 +52,14 @@ namespace KaraokeWebApp3.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginForManager(string username, string password)
         {
-            var user = await _authService.Authenticate(username, password);
+            var user = await _authService.AuthenticateManager(username, password);
             if (user == null) return View();
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, "Manager")
             };
 
             var identity = new ClaimsIdentity(claims,
@@ -67,7 +69,7 @@ namespace KaraokeWebApp3.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("HomeForManager", "Home");
         }
 
         [HttpPost]
@@ -86,15 +88,15 @@ namespace KaraokeWebApp3.Controllers
 
         // POST: /Account/Register
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(string username, string password, string phone)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                ViewBag.Error = "Логин и пароль обязательны";
+                ViewBag.Error = "Номер телефона, имя и пароль обязательны";
                 return View();
             }
 
-            var result = await _authService.Register(username, password);
+            var result = await _authService.Register(username, password, phone);
 
             if (result)
             {
@@ -105,5 +107,35 @@ namespace KaraokeWebApp3.Controllers
             ViewBag.Error = "Пользователь с таким логином уже существует";
             return View();
         }
+
+
+
+        // GET: /Account/RegisterForManager
+        [HttpGet]
+        public IActionResult RegisterForManager() => View();
+
+
+        // POST: /Account/Register
+        [HttpPost]
+        public async Task<IActionResult> RegisterForManager(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error = "Логин и пароль обязательны";
+                return View();
+            }
+
+            var result = await _authService.RegisterForManager(username, password);
+
+            if (result)
+            {
+                // Автоматический вход после регистрации
+                return RedirectToAction("Login");
+            }
+
+            ViewBag.Error = "Пользователь с таким логином уже существует";
+            return View();
+        }
+
     }
 }

@@ -1,0 +1,73 @@
+﻿namespace KaraokeWebApp3
+{
+	public class BookingService
+	{
+		public BookingService(AppDbContext db) 
+		{
+			_db = db;
+		}
+
+		private readonly AppDbContext _db;
+
+		//получаем список бронирований
+		public List<Booking> GetBookings(SearchOptions options)
+		{
+			var list = _db.Bookings.AsQueryable();
+			if(options.UserId != null)
+				list = list.Where(x => x.ClientId == options.UserId);
+
+
+			return list.ToList();
+		}
+
+		public List<User> GetUsers()
+		{
+			var list = _db.Users.ToList();
+
+
+			return list;
+		}
+
+		public List<User> GetClients()
+		{
+			var list = _db.Users.Where(x => x.UserType == (int)UserTypeEnum.Client).ToList();
+
+
+			return list;
+		}
+
+		public List<Space> GetSpaces()
+		{
+			var list = _db.Spaces.ToList();
+
+
+			return list;
+		}
+
+		public void BookClient(int clientId)
+		{
+			var one = new Booking();
+			one.ClientId = clientId;
+			one.AuthorId = clientId;
+
+
+			_db.Bookings.Add(one);
+			_db.SaveChanges();
+		}
+
+
+	}
+
+	public class SearchOptions
+	{
+		public SearchOptions()
+		{
+			UserId = null;
+		}
+
+		public int Year { get; set; }
+		public int Month { get; set; }
+
+		public int? UserId { get; set; }
+	}
+}

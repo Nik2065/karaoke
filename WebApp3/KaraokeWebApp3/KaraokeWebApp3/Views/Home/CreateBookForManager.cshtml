@@ -1,0 +1,68 @@
+﻿@{
+	Layout = "_Layout2";
+}
+@model CreateBookForManagerModel
+
+
+<div class="card">
+	<div class="card-body">
+		<h4 class="card-title">Создать бронирование</h4>
+
+
+
+		<form>
+			<div class="row" style="text-align:right">
+				<a href=""></a>
+			</div>
+
+			<div style="text-align:right">
+				<button type="submit" class="btn btn-primary">Создать бронирование</button>
+			</div>
+
+			<div class="row">
+				
+				<div class="mb-3">
+					<label for="formGroupExampleInput" class="form-label">Клиент</label>
+					@*<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">*@
+					<select class="form-select" >
+						@{
+							foreach(var u in Model.Clients)
+							{
+								<option value="-1" selected>Выберите клиента из списка</option>
+								<option value='@u.Id'>@u.Phone | @u.Username</option>
+							}
+						}
+
+					</select>
+				</div>
+				<div class="mb-3">
+					<label for="formGroupExampleInput2" class="form-label">Зал</label>
+					<select class="form-select">
+						@{
+
+							<option value="-1" selected>Выберите зал из списка</option>
+							foreach (var s in Model.Spaces)
+							{
+								<option value='@s.Id'>@s.SpaceName</option>
+							}
+						}
+
+					</select>
+				</div>
+
+
+				<div style="text-align:right">
+					<button type="submit" class="btn btn-primary">Создать</button>
+				</div>
+
+				
+
+
+			</div>
+
+
+		</form>
+
+	</div>
+</div>
+

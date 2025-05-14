@@ -35,7 +35,8 @@
 
             services.AddControllersWithViews();
             services.AddScoped<AuthService>();
-        }
+			services.AddScoped<BookingService>();
+		}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

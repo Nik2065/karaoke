@@ -1,13 +1,40 @@
-﻿
-@*
-    @page
-@model KaraokeWebApp3.Views.Account.LoginModel
-@{
+﻿@{
+    Layout = "_LayoutForLogin";
 }
-*@
+
+
 <!-- Views/Account/Login.cshtml -->
+<br/>
+<br/>
+<br />
+
 <form method="post">
-    <input type="text" name="username" placeholder="Логин" required>
-    <input type="password" name="password" placeholder="Пароль" required>
-    <button type="submit">Войти</button>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Личный кабинет клиента</h4>
+        <div class="row">
+            <div class="col-4"></div>
+                <div class="col-4">
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Телефон</label>
+                    <input type="text" name="phone" class="form-control" id="exampleFormControlInput1" >
+                </div>
+                <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" id="exampleFormControlInput1">
+                </div>
+                    <div style="text-align:right">
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+            </div>
+    </div>
+</div>
 </form>
+
+@*        <form method="post">
+            <input type="text" name="phone" placeholder="Телефон" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button class="btn btn-primary" type="submit">Войти</button>
+        </form>*@

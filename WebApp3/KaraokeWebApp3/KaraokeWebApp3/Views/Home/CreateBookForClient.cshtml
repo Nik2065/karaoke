@@ -1,0 +1,90 @@
+﻿@{
+	Layout = "_Layout2";
+}
+@model CreateBookForClientModel
+
+<div class="card">
+	<div class="card-body">
+		<h4 class="card-title">Создать бронирование</h4>
+
+
+		<form method="post" action='@Url.Action("CreateBookForClientResult", "Home")'>
+
+
+			<div class="row">
+				<div class="col-3"></div>
+
+				<div class="col-6">
+
+
+					<div class="mb-3">
+						<label for="formGroupExampleInput2" class="form-label">Зал</label>
+						<select name="zalId" class="form-select">
+							@{
+								<option value="-1" selected>Выберите зал из списка</option>
+								foreach (var s in Model.Spaces)
+								{
+									<option value='@s.Id'>@s.SpaceName</option>
+								}
+							}
+
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label for="formGroupExampleInput" class="form-label">Дата начала бронирования</label>
+					</div>
+					<div class="mb-3 row">
+						<div class="col-6">
+							<input name="begin" type="date" class="form-control" id="formGroupExampleInput" placeholder="">
+						</div>
+						<div class="col-6">
+							<select name="begintime" class="form-select">
+								<option value="15">15:00</option>
+								<option value="16">16:00</option>
+								<option value="17">17:00</option>
+								<option value="18">18:00</option>
+								<option value="19">19:00</option>
+								<option value="20">20:00</option>
+								<option value="21">21:00</option>
+								<option value="22">22:00</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label for="Input3" class="form-label">Время окончания бронирования</label>
+					</div>
+
+					<div class="mb-3 row">
+						<div class="col-6">
+							<input name="end" type="date" class="form-control" id="Input3" placeholder="">
+						</div>
+						<div class="col-6">
+							<select name="endtime" class="form-select">
+								<option value="15">15:00</option>
+								<option value="16">16:00</option>
+								<option value="17">17:00</option>
+								<option value="18">18:00</option>
+								<option value="19">19:00</option>
+								<option value="20">20:00</option>
+								<option value="21">21:00</option>
+								<option value="22">22:00</option>
+								<option value="23">23:00</option>
+							</select>
+						</div>
+					</div>
+
+					<div style="text-align:right">
+						<button type="submit" class="btn btn-primary">Создать</button>
+					</div>
+				</div>
+				<div class="col-3"></div>
+				
+			</div>
+
+		</form>
+
+	</div>
+</div>
+
