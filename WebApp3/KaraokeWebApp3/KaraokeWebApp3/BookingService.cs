@@ -44,11 +44,16 @@
 			return list;
 		}
 
-		public void BookClient(int clientId)
+		public void BookClient(int clientId, DateTime begin, DateTime end, int zalId)
 		{
+			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
+
 			var one = new Booking();
 			one.ClientId = clientId;
 			one.AuthorId = clientId;
+			one.DtBegin = begin; one.DtEnd = end;
+			one.Created = DateTime.Now;
+			one.SpaceName = zal?.SpaceName ?? "-";
 
 
 			_db.Bookings.Add(one);

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace KaraokeWebApp3.Controllers
 {
@@ -99,10 +100,31 @@ namespace KaraokeWebApp3.Controllers
 			var userIdStr = claims?.FirstOrDefault(x => x.Type.Contains("nameidentifier"))?.Value;
 			var userId = int.Parse(userIdStr);
 
-			_bookingService.BookClient(userId,)
+			//
+			// todo
+			// проверка полученных значений на разумность 
 
+			var model = new CreateBookForClientResultModel();
+			model.Success = true;
+            model.Message = "Бронирование создано";
 
-            var model = new CreateBookForClientResultModel();
+			try
+            {
+                var b = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime b1 = new DateTime(b.Year, b.Month, b.Day, begintime, 0, 0);
+
+                var e = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                DateTime e1 = new DateTime(e.Year, e.Month, e.Day, endtime, 0, 0);
+
+                _bookingService.BookClient(userId, b1, e1, zalId);
+            }
+            catch (Exception ex)
+            {
+				model.Success = false;
+				model.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
+
+            
 
 
 			return View(model);
