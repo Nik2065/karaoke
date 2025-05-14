@@ -60,7 +60,21 @@
 			_db.SaveChanges();
 		}
 
+		public void BookClientByManager(int clientId, int managerId, DateTime begin, DateTime end, int zalId)
+		{
+			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
 
+			var one = new Booking();
+			one.ClientId = clientId;
+			one.AuthorId = managerId;
+			one.DtBegin = begin; one.DtEnd = end;
+			one.Created = DateTime.Now;
+			one.SpaceName = zal?.SpaceName ?? "-";
+
+
+			_db.Bookings.Add(one);
+			_db.SaveChanges();
+		}
 	}
 
 	public class SearchOptions

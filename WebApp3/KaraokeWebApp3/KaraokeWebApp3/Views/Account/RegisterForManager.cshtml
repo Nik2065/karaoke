@@ -1,13 +1,48 @@
-﻿@*
-@page
-@model KaraokeWebApp3.Views.Account.RegisterModel
-@{
+﻿@{
+    Layout = "_LayoutForLogin";
 }
-*@
 
-<!-- Views/Account/Register.cshtml -->
+
+<br />
+<br />
+<br />
+
+
 <form method="post">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Регистрация для менеджера</h4>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label for="Input1" class="form-label">Имя</label>
+                        <input type="text" name="username" class="form-control" id="Input1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="Input3" class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" id="Input3">
+                    </div>
+
+                    <div style="text-align:right">
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </div>
+                </div>
+
+                <div class="col-4"></div>
+            </div>
+
+            <div class="row">
+                @ViewBag.Error
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+@*<form method="post">
     <input type="text" name="username" placeholder="Логин" required>
     <input type="password" name="password" placeholder="Пароль" required>
     <button type="submit">Зарегистрироваться</button>
-</form>
+</form>*@

@@ -1,0 +1,35 @@
+﻿@{
+	Layout = "_Layout2";
+}
+@model CreateBookForManagerResultModel
+
+<div class="card">
+	<div class="card-body">
+		<h4 class="card-title">Создать бронирование</h4>
+
+
+		<form method="post">
+
+
+			<div class="row">
+				<div class="col-3"></div>
+
+				<div class="col-6">
+					@(Model.Message?.ToString())
+					<br/>
+					<!--
+					@(Model.Success?.ToString())
+					-->
+					<a class="btn btn-outline-primary" href='@Url.Action("HomeForManager","Home")' >Перейти к списку бронирований</a>
+                </div>
+
+				
+				<div class="col-3"></div>
+			
+			</div>
+
+		</form>
+
+	</div>
+</div>
+

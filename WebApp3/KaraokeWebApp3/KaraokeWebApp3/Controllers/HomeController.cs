@@ -113,7 +113,7 @@ namespace KaraokeWebApp3.Controllers
                 var b = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 DateTime b1 = new DateTime(b.Year, b.Month, b.Day, begintime, 0, 0);
 
-                var e = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var e = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 DateTime e1 = new DateTime(e.Year, e.Month, e.Day, endtime, 0, 0);
 
                 _bookingService.BookClient(userId, b1, e1, zalId);
@@ -130,5 +130,47 @@ namespace KaraokeWebApp3.Controllers
 			return View(model);
 		}
 
+		
+		[Authorize]
+		[HttpPost]
+		public IActionResult CreateBookForManagerResult(int clientId, int zalId, string begin, int begintime, string end, int endtime)
+		{
+			//var model = new CreateBookForClientModel();
+			//model.Spaces = _bookingService.GetSpaces();
+			//пишем бронь в базу
+			//Узнаем id пользователя из сессии
+			var claims = User.Claims;
+			var userIdStr = claims?.FirstOrDefault(x => x.Type.Contains("nameidentifier"))?.Value;
+			var userId = int.Parse(userIdStr);
+
+			//
+			// todo
+			// проверка полученных значений на разумность 
+
+			var model = new CreateBookForManagerResultModel();
+			model.Success = true;
+			model.Message = "Бронирование создано";
+
+			try
+			{
+				var b = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, begintime, 0, 0);
+
+				var e = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, endtime, 0, 0);
+
+				_bookingService.BookClientByManager(clientId, userId, b1, e1, zalId);
+			}
+			catch (Exception ex)
+			{
+				model.Success = false;
+				model.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
+
+
+
+
+			return View(model);
+		}
 	}
 }

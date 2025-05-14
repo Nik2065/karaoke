@@ -130,7 +130,7 @@ namespace KaraokeWebApp3.Controllers
             if (result)
             {
                 // Автоматический вход после регистрации
-                return RedirectToAction("Login");
+                return RedirectToAction("LoginForManager");
             }
 
             ViewBag.Error = "Пользователь с таким логином уже существует";

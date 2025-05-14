@@ -16,12 +16,13 @@
 			</div>
 			
 			<div style="text-align:right">
-				<a href='@Url.Action("CreateItemForManager", "Home")' class="btn btn-primary">Создать бронирование</a>
+				<a href='@Url.Action("CreateBookForManager", "Home")' class="btn btn-primary">Создать бронирование</a>
 			</div>
 
-			<div class="row">
+		<div class="row">
 				<br />
-				<table class="table table-bordered">
+				<!--TODO: фильтр для поиска-->
+				@*	<table class="table table-bordered">
 					<thead>
 						<tr>
 							<td>
@@ -56,7 +57,7 @@
 				</table>
 				<div style="text-align:right">
 					<button type="submit" class="btn btn-primary">Показать</button>
-				</div>
+				</div>*@
 
 				<br />
 				<br />
@@ -84,7 +85,7 @@
 
 								<tr>
 									<td>@item.Id</td>
-									<td>@item.DtBegin.Month</td>
+									<td>@Model.GetMonthName(item.DtBegin.Month)</td>
 									<td>@item.DtBegin.Day</td>
 									<td>
 										@currentClient?.Phone
