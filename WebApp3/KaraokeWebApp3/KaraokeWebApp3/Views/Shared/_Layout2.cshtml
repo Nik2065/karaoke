@@ -51,10 +51,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Spaces", "Home")'>Залы</a></li>
+                    <li class="nav-item nav-link">
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                    </li>
                     <li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для клиента</a></li>
                     <li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для клиента</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href='@Url.Action("RegisterForManager", "Account")'>Регистрация для менеджера</a></li>
                     <li class="nav-item"><a class="nav-link" href='@Url.Action("LoginForManager", "Account")'>Вход для менеджера</a></li>
                 </ul>
             </div>

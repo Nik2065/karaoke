@@ -12,6 +12,8 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
+      //попробуем включить
+      "hotReloadEnabled": true,
       "applicationUrl": "http://localhost:5105",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
