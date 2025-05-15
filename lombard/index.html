@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldSafe - Ломбард</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('./img/main_banner.jpg') center/cover;
+            height: 70vh;
+            color: white;
+        }
+        .icon-box {
+            width: 60px;
+            height: 60px;
+        }
+        .section {
+            padding: 5rem 0;
+        }
+        .bg-light-gray {
+            background-color: #f8f9fa;
+        }
+		.navFont{
+			font-size: 1.5rem;
+		}
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container navFont" >
+            <a class="navbar-brand fw-bold text-warning " style="font-size:2rem" href="#">GoldSafe</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой-секция -->
+    <section class="hero-section d-flex align-items-center">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Быстрый займ под залог</h1>
+            <p class="lead mb-4">Получите деньги за 15 минут с гарантией сохранности ваших ценностей</p>
+            <button class="btn btn-warning btn-lg">Получить деньги</button>
+        </div>
+    </section>
+
+		<!-- Преимущества -->
+		<section class="section bg-light-gray" id="services">
+			<div class="container">
+				<h2 class="text-center mb-5">Наши преимущества</h2>
+				<div class="row g-4">
+				
+				<div class="col-md-4">
+					<div class="card h-100 shadow">
+						<div class="card-body text-center">
+							<div class="icon-box bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+								<i class="bi bi-percent fs-4 text-white"></i>
+							</div>
+							<h5>Выгодные ставки</h5>
+							<p>Самые низкие процентные ставки на рынке - от 5% в месяц</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card h-100 shadow">
+						<div class="card-body text-center">
+							<div class="icon-box bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+								<i class="bi bi-shield-check fs-4 text-white"></i>
+							</div>
+							<h5>Безопасность</h5>
+							<p>Охраняемое хранилище и страховка залога</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card h-100 shadow">
+						<div class="card-body text-center">
+							<div class="icon-box bg-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+								<i class="bi bi-clock-history fs-4 text-white"></i>
+							</div>
+							<h5>Быстрое оформление</h5>
+							<p>Получение денег за 15 минут без проверок</p>
+						</div>
+					</div>
+				</div>
+				
+            </div>
+        </div>
+    </section>
+
+    <!-- Как это работает -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="text-center mb-5">Как это работает</h2>
+            <div class="row g-4 text-center">
+			<div class="col-md-4">
+				<i class="bi bi-search-heart fs-1 text-warning mb-3"></i>
+				<div class="h2 text-warning mb-3">1</div>
+				<h5>Оценка</h5>
+				<p>Профессиональная оценка вашего изделия</p>
+			</div>
+			<div class="col-md-4">
+				<i class="bi bi-file-text fs-1 text-warning mb-3"></i>
+				<div class="h2 text-warning mb-3">2</div>
+				<h5>Договор</h5>
+				<p>Оформление договора займа</p>
+			</div>
+			<div class="col-md-4">
+				<i class="bi bi-cash-coin fs-1 text-warning mb-3"></i>
+				<div class="h2 text-warning mb-3">3</div>
+				<h5>Выдача денег</h5>
+				<p>Мгновенная выдача наличных</p>
+			</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section class="section bg-light-gray" id="contacts">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md-6">
+                    <h2 class="mb-4">Наши контакты</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <strong>Адрес:</strong> г. Москва, ул. Примерная, 15
+                        </li>
+                        <li class="mb-3">
+                            <strong>Телефон:</strong> +7 (495) 123-45-67
+                        </li>
+                        <li class="mb-3">
+                            <strong>Часы работы:</strong> Пн-Пт: 9:00-20:00
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+				<form>
+					<div class="mb-3">
+						<div class="input-group">
+							<span class="input-group-text">
+								<i class="bi bi-person"></i>
+							</span>
+							<input type="text" class="form-control" placeholder="Ваше имя">
+						</div>
+					</div>
+					<div class="mb-3">
+						<div class="input-group">
+							<span class="input-group-text">
+								<i class="bi bi-telephone"></i>
+							</span>
+							<input type="tel" class="form-control" placeholder="Телефон">
+						</div>
+					</div>
+					<button class="btn btn-warning w-100">
+						<i class="bi bi-envelope-check me-2"></i>Заказать звонок
+					</button>
+				</form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white py-4">
+		<div class="container text-center">
+			<div class="mb-3">
+				<a href="#" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
+				<a href="#" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
+				<a href="#" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
+			</div>
+			<p class="mb-0">© 2023 GoldSafe. Все права защищены</p>
+		</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

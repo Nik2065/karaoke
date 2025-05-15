@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "_LayoutForLogin";
+}
+
+
+
+<form method="post">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Личный кабинет менеджера</h4>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label for="Input1" class="form-label">Логин</label>
+                        <input type="text" name="username" class="form-control" id="Input1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formGroupExampleInput" class="form-label">Пароль</label>
+                        <input type="password" name="password" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div style="text-align:right">
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4">
+                @ViewBag.Error
+                </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+    </div>
+</form>
