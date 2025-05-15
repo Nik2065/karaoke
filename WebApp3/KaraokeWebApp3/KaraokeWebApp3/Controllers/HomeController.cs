@@ -174,10 +174,27 @@ namespace KaraokeWebApp3.Controllers
 		}
 
 
+        /// <summary>
+        /// Страница "Залы"
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Spaces()
         {
             return View();
         }
-    }
+
+
+
+        /// <summary>
+        /// Страница услуг
+        /// </summary>
+        /// <returns></returns>
+		[HttpGet]
+		public IActionResult Services()
+		{
+			return View();
+		}
+
+	}
 }

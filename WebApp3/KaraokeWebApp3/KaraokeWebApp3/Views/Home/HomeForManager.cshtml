@@ -4,6 +4,32 @@
 }
 
 @model HomeForManagerModel
+<script>
+	function deleteItem(id){
+
+		const url = '/data/DeleteBookItem?id=' + id;
+		fetch(url, {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8'
+			},
+			body: ''
+		})
+		.then(resp => resp.json())
+		.then(result => {
+			console.log(result)
+			if(result.success){
+				alert('Запись удалена');
+				location.reload();
+			}
+			else{
+				//todo
+			}
+
+		})
+
+	}
+</script>
 
 <div class="card">
 	<div class="card-body">
@@ -74,6 +100,7 @@
 							<td>Зал</td>
 							<td>Время начала</td>
 							<td>Время окончания</td>
+							<td></td>
 						</tr>
 					</thead>
 					<tbody>
@@ -96,6 +123,11 @@
 									<td>@item.SpaceName</td>
 									<td>@item.DtBegin.ToString("yyyy-MM-dd_HH:mm")</td>
 									<td>@item.DtEnd.ToString("yyyy-MM-dd_HH:mm")</td>
+									<td>
+										<button title="Удалить запись" class="btn btn-outline-secondary" type="button" onclick="deleteItem(@item.Id)">
+											<i style="color:slategray"  class="bi bi-trash"></i>
+										</button>
+									</td>
 								</tr>
 							}
 						}

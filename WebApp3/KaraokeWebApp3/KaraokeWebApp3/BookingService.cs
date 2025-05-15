@@ -75,6 +75,16 @@
 			_db.Bookings.Add(one);
 			_db.SaveChanges();
 		}
+
+		public void DeleteBookItem(int id)
+		{
+			var one = _db.Bookings.FirstOrDefault(x => x.Id == id);
+			if (one != null)
+			{
+				_db.Bookings.Remove(one);
+				_db.SaveChanges();
+			}
+		}
 	}
 
 	public class SearchOptions
