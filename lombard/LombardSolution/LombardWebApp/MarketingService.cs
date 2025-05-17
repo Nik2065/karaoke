@@ -18,5 +18,12 @@
             return list;
         }
 
+        public void AddLead(string name, string phone)
+        {
+            var a = new Lead { Username = name, Phone = phone, Created = DateTime.Now };
+            _db.Leads.Add(a);
+            _db.SaveChanges();
+        }
+
     }
 }

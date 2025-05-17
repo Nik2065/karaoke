@@ -32,6 +32,47 @@
 			font-size: 1.2rem;
 		}
     </style>
+	<script>
+	
+		function sendForm(){
+			const name = document.getElementById("name").value;
+			const phone = document.getElementById("phone").value;
+			let contactForm = document.getElementById("contactForm");
+
+
+			const url = "/data/sendForm"
+			fetch(url, {
+				method:"POST",
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify({
+					name: name,
+					phone: phone
+				})
+
+			})
+			.then(resp => resp.json())
+			.then(result=> {
+					console.log(result);
+					if (result.success) {
+						//alert('Запись удалена');
+						//location.reload();
+						contactForm.innerHTML = '<strong>Заявка отправлена</strong>'
+					}
+					else {
+						//todo
+						contactForm.innerHTML = '<strong>Ошибка при отправке заявки</strong>'
+					}
+			})
+			.catch(error =>{
+				console.log(error);
+			})
+
+		}
+
+
+	</script>
 </head>
 <body>
     <!-- Навигация -->
@@ -156,13 +197,14 @@
                     </ul>
                 </div>
                 <div class="col-md-6">
-				<form>
+				<!--form-->
+				<div id="contactForm">
 					<div class="mb-3">
 						<div class="input-group">
 							<span class="input-group-text">
 								<i class="bi bi-person"></i>
 							</span>
-							<input type="text" class="form-control" placeholder="Ваше имя">
+							<input id="name" type="text" class="form-control" placeholder="Ваше имя">
 						</div>
 					</div>
 					<div class="mb-3">
@@ -170,13 +212,14 @@
 							<span class="input-group-text">
 								<i class="bi bi-telephone"></i>
 							</span>
-							<input type="tel" class="form-control" placeholder="Телефон">
+							<input id="phone" type="tel" class="form-control" placeholder="Телефон">
 						</div>
 					</div>
-					<button class="btn btn-warning w-100">
+					<button onclick="sendForm()" class="btn btn-warning w-100">
 						<i class="bi bi-envelope-check me-2"></i>Заказать звонок
 					</button>
-				</form>
+				</div>
+				<!--/form-->
                 </div>
             </div>
         </div>
