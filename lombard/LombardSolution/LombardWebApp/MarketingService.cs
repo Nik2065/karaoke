@@ -25,5 +25,34 @@
             _db.SaveChanges();
         }
 
+        //рассчитываем займ
+        public decimal CalcDeposit(DepositTypeEnum type, decimal sum)
+        {
+            decimal rate = 0;
+
+
+            if (type == DepositTypeEnum.Auto)
+                rate = 0.96m;
+            else if (type == DepositTypeEnum.Jewelry)
+                rate = 1.08m;
+            else if (type == DepositTypeEnum.Other)
+                rate = 0.9m;
+            else
+                throw new Exception("Не найдена ставка для вычисления");
+
+            decimal result = (decimal)sum * (1 + rate);
+            result = Math.Round(result / 12, 2);
+
+            return result;
+		}
+
     }
+
+	public enum DepositTypeEnum
+	{
+		NotInList = -1,
+		Auto = 1,
+		Jewelry = 2,
+		Other = 3,
+	}
 }

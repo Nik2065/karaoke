@@ -1,39 +1,42 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-    Layout = null;
+	ViewData["Title"] = "Home Page";
+	Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoldSafe - Ломбард</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>GoldSafe - Ломбард</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('./img/main_banner.jpg') center/cover;
-            height: 70vh;
-            color: white;
-        }
-        .icon-box {
-            width: 60px;
-            height: 60px;
-        }
-        .section {
-            padding: 5rem 0;
-        }
-        .bg-light-gray {
-            background-color: #f8f9fa;
-        }
-		.navFont{
+	<style>
+		.hero-section {
+			background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('./img/main_banner.jpg') center/cover;
+			height: 70vh;
+			color: white;
+		}
+
+		.icon-box {
+			width: 60px;
+			height: 60px;
+		}
+
+		.section {
+			padding: 5rem 0;
+		}
+
+		.bg-light-gray {
+			background-color: #f8f9fa;
+		}
+
+		.navFont {
 			font-size: 1.2rem;
 		}
-    </style>
+	</style>
 	<script>
-	
+
 		function sendForm(){
 			const name = document.getElementById("name").value;
 			const phone = document.getElementById("phone").value;
@@ -72,45 +75,82 @@
 		}
 
 
+		function calcDeposit(){
+			const t = document.getElementById("deposit_type").value;
+			const sum = document.getElementById("sum").value;
+			let resultEl = document.getElementById("result");
+
+
+			const url = "/data/CalcDeposit"
+			fetch(url, {
+				method:"POST",
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8'
+				},
+				body: JSON.stringify({
+					sum: sum,
+					depositType: t
+				})
+			})
+			.then(resp => resp.json())
+			.then(result=> {
+					console.log(result);
+					if (result.success) {
+						//alert('Запись удалена');
+						//location.reload();
+						resultEl.innerHTML = result.sumInMonth + " руб.";
+					}
+					else {
+						//todo
+						resultEl.innerHTML = '<strong>Ошибка при расчете</strong>'
+					}
+			})
+			.catch(error =>{
+				console.log(error);
+			})
+
+		}
+
+
 	</script>
 </head>
 <body>
-    <!-- Навигация -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
-        <div class="container navFont" >
-            <a class="navbar-brand fw-bold text-warning " style="font-size:2rem" href="#">GoldSafe</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+	<!-- Навигация -->
+	<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+		<div class="container navFont">
+			<a class="navbar-brand fw-bold text-warning " style="font-size:2rem" href="#">GoldSafe</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
+					<li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
+					<li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
 					<li class="nav-item nav-link">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</li>
-					
+
 					<li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для менеджера</a></li>
 					@*<li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для менеджера</a></li>*@
-                </ul>
-            </div>
-        </div>
-    </nav>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <!-- Герой-секция -->
-    <section class="hero-section d-flex align-items-center">
-        <div class="container text-center">
-            <h1 class="display-4 mb-4">Быстрый займ под залог</h1>
-            <p class="lead mb-4">Получите деньги за 15 минут с гарантией сохранности ваших ценностей</p>
+	<!-- Герой-секция -->
+	<section class="hero-section d-flex align-items-center">
+		<div class="container text-center">
+			<h1 class="display-4 mb-4">Быстрый займ под залог</h1>
+			<p class="lead mb-4">Получите деньги за 15 минут с гарантией сохранности ваших ценностей</p>
 			<a href="#contacts" class="btn btn-warning btn-lg">Получить деньги</a>
-        </div>
-    </section>
+		</div>
+	</section>
 
-		<!-- Преимущества -->
-		<section class="section bg-light-gray" id="services">
-			<div class="container">
-				<h2 class="text-center mb-5">Наши преимущества</h2>
-				<div class="row g-4">
-				
+	<!-- Преимущества -->
+	<section class="section bg-light-gray" id="services">
+		<div class="container">
+			<h2 class="text-center mb-5">Наши преимущества</h2>
+			<div class="row g-4">
+
 				<div class="col-md-4">
 					<div class="card h-100 shadow">
 						<div class="card-body text-center">
@@ -146,87 +186,146 @@
 						</div>
 					</div>
 				</div>
-				
-            </div>
-        </div>
-    </section>
 
-    <!-- Как это работает -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="text-center mb-5">Как это работает</h2>
-            <div class="row g-4 text-center">
-			<div class="col-md-4">
-				<i class="bi bi-search-heart fs-1 text-warning mb-3"></i>
-				<div class="h2 text-warning mb-3">1</div>
-				<h5>Оценка</h5>
-				<p>Профессиональная оценка вашего изделия</p>
 			</div>
-			<div class="col-md-4">
-				<i class="bi bi-file-text fs-1 text-warning mb-3"></i>
-				<div class="h2 text-warning mb-3">2</div>
-				<h5>Договор</h5>
-				<p>Оформление договора займа</p>
-			</div>
-			<div class="col-md-4">
-				<i class="bi bi-cash-coin fs-1 text-warning mb-3"></i>
-				<div class="h2 text-warning mb-3">3</div>
-				<h5>Выдача денег</h5>
-				<p>Мгновенная выдача наличных</p>
-			</div>
-            </div>
-        </div>
-    </section>
+		</div>
+	</section>
 
-    <!-- Контакты -->
-    <section class="section bg-light-gray" id="contacts">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-md-6">
-                    <h2 class="mb-4">Наши контакты</h2>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-							<strong>Адрес:</strong> г. Красноярск, улица Матросова 3
-                        </li>
-                        <li class="mb-3">
-                            <strong>Телефон:</strong> +7 (495) 123-45-67
-                        </li>
-                        <li class="mb-3">
-                            <strong>Часы работы:</strong> Пн-Пт: 9:00-20:00
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-				<!--form-->
-				<div id="contactForm">
-					<div class="mb-3">
-						<div class="input-group">
-							<span class="input-group-text">
-								<i class="bi bi-person"></i>
-							</span>
-							<input id="name" type="text" class="form-control" placeholder="Ваше имя">
-						</div>
-					</div>
-					<div class="mb-3">
-						<div class="input-group">
-							<span class="input-group-text">
-								<i class="bi bi-telephone"></i>
-							</span>
-							<input id="phone" type="tel" class="form-control" placeholder="Телефон">
-						</div>
-					</div>
-					<button onclick="sendForm()" class="btn btn-warning w-100">
-						<i class="bi bi-envelope-check me-2"></i>Заказать звонок
-					</button>
+	<!-- Как это работает -->
+	<section class="section" id="about">
+		<div class="container">
+			<h2 class="text-center mb-5">Как это работает</h2>
+			<div class="row g-4 text-center">
+				<div class="col-md-4">
+					<i class="bi bi-search-heart fs-1 text-warning mb-3"></i>
+					<div class="h2 text-warning mb-3">1</div>
+					<h5>Оценка</h5>
+					<p>Профессиональная оценка вашего изделия</p>
 				</div>
-				<!--/form-->
-                </div>
-            </div>
-        </div>
-    </section>
+				<div class="col-md-4">
+					<i class="bi bi-file-text fs-1 text-warning mb-3"></i>
+					<div class="h2 text-warning mb-3">2</div>
+					<h5>Договор</h5>
+					<p>Оформление договора займа</p>
+				</div>
+				<div class="col-md-4">
+					<i class="bi bi-cash-coin fs-1 text-warning mb-3"></i>
+					<div class="h2 text-warning mb-3">3</div>
+					<h5>Выдача денег</h5>
+					<p>Мгновенная выдача наличных</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    <!-- Футер -->
-    <footer class="bg-dark text-white py-4">
+
+	<!-- рассчет займа  -->
+	<section class="section" id="">
+		<div class="container">
+			<div class="row">
+				<div class="col-3" >
+				</div>
+				<div class="col-6" >
+
+					<div id="calcForm" style="font-size:1.4em">
+						<div class="mb-3">
+							<div class="input-group">
+								<span class="input-group-text col-4">
+									Тип залога
+								</span>
+								<select id="deposit_type" type="text" class="form-control col-8">
+									<option value="-1">Выберите тип залога</option>
+									<option value="1">Автозайм</option>
+									<option value="2">Ювелирные изделия</option>
+									<option value="3">Остальные категории</option>
+								</select>
+							</div>
+						</div>
+						<div class="mb-3">
+							<div class="input-group">
+								<span class="input-group-text col-4">
+									Сумма займа
+								</span>
+								<input id="sum" type="number" class="form-control col-8" placeholder="10000">
+							</div>
+						</div>
+						<button onclick="calcDeposit()" class="btn btn-warning w-100">
+							<i class="bi bi-calculator"></i>  Рассчитать
+						</button>
+
+						<div class="mb-3">
+							<div class="input-group row">
+								<div class="h6 col-4" style="">
+									Ежемесячный платеж, при расчете на 12 месяцев составит:
+								</div>
+								<div id="result" class="col-8 " style="text-align:right">
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+				</div>
+				<div class="col-3" >
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+
+	<!-- Контакты -->
+	<section class="section bg-light-gray" id="contacts">
+		<div class="container">
+			<div class="row g-5">
+				<div class="col-md-6">
+					<h2 class="mb-4">Наши контакты</h2>
+					<ul class="list-unstyled">
+						<li class="mb-3">
+							<strong>Адрес:</strong> г. Красноярск, улица Матросова 3
+						</li>
+						<li class="mb-3">
+							<strong>Телефон:</strong> +7 (495) 123-45-67
+						</li>
+						<li class="mb-3">
+							<strong>Часы работы:</strong> Пн-Пт: 9:00-20:00
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<!--form-->
+					<div id="contactForm">
+						<div class="mb-3">
+							<div class="input-group">
+								<span class="input-group-text">
+									<i class="bi bi-person"></i>
+								</span>
+								<input id="name" type="text" class="form-control" placeholder="Ваше имя">
+							</div>
+						</div>
+						<div class="mb-3">
+							<div class="input-group">
+								<span class="input-group-text">
+									<i class="bi bi-telephone"></i>
+								</span>
+								<input id="phone" type="tel" class="form-control" placeholder="Телефон">
+							</div>
+						</div>
+						<button onclick="sendForm()" class="btn btn-warning w-100">
+							<i class="bi bi-envelope-check me-2"></i>Заказать звонок
+						</button>
+					</div>
+					<!--/form-->
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Футер -->
+	<footer class="bg-dark text-white py-4">
 		<div class="container text-center">
 			<div class="mb-3">
 				<a href="#" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
@@ -235,8 +334,8 @@
 			</div>
 			<p class="mb-0">© 2023 GoldSafe. Все права защищены</p>
 		</div>
-    </footer>
+	</footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
