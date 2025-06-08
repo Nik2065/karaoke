@@ -1,0 +1,23 @@
+[Unit]
+# Описание
+Description=LombardSiteToDeploy
+ 
+[Service]
+# Каталог с файлами приложения
+WorkingDirectory=/var/www/lombard/http/
+# Команда запуска процесса
+ExecStart=/usr/bin/dotnet /var/www/lombard/http/LombardWebApp.dll --urls "http://*:6001"
+# Перезапускать всегда
+Restart=always
+# При аварийном завершении процесса перезапускаем его через 10 секунд
+RestartSec=10
+KillSignal=SIGINT
+# Идентификатор
+SyslogIdentifier=lombard_site
+# Пользователь для запуска
+User=www-data
+# Имя окружения для приложения
+Environment=ASPNETCORE_ENVIRONMENT=Production
+ 
+[Install]
+WantedBy=multi-user.target

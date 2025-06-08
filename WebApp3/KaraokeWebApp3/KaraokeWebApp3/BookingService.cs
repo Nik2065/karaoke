@@ -9,16 +9,32 @@
 
 		private readonly AppDbContext _db;
 
-		//получаем список бронирований
+		//получаем список бронирований 
 		public List<Booking> GetBookings(SearchOptions options)
 		{
 			var list = _db.Bookings.AsQueryable();
-			if(options.UserId != null)
+			var dtNow = DateTime.Now;
+			if (options.UserId != null)
+			{
 				list = list.Where(x => x.ClientId == options.UserId);
 
+				if(options.TimeType == TimeType.Future)
+				{
+					list = list.Where(x => x.DtBegin >= dtNow);
+				}
+				else if(options.TimeType == TimeType.Past)
+				{
+					list = list.Where(x => x.DtBegin < dtNow);
+				}
+			}
 
 			return list.ToList();
 		}
+
+
+
+
+
 
 		public List<User> GetUsers()
 		{
@@ -98,5 +114,14 @@
 		public int Month { get; set; }
 
 		public int? UserId { get; set; }
+
+		public TimeType TimeType { get; set; }
+	}
+
+	public enum TimeType
+	{
+		All = 0,
+		Future = 1,
+		Past = 2
 	}
 }

@@ -72,7 +72,7 @@ namespace KaraokeWebApp3.Controllers
             return RedirectToAction("HomeForManager", "Home");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

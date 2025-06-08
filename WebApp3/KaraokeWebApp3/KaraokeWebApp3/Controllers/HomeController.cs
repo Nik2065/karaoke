@@ -45,7 +45,11 @@ namespace KaraokeWebApp3.Controllers
 			var list = _bookingService.GetBookings(so);
 
             var model = new HomeForClientModel();
-            model.Bookings = list;
+            so.TimeType = TimeType.Future;
+            model.FutureBookings = _bookingService.GetBookings(so);
+			so.TimeType = TimeType.Past;
+			model.PastBookings = _bookingService.GetBookings(so);
+
 
 			return View(model);
         }

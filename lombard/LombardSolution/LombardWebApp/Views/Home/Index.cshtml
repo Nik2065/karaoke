@@ -223,9 +223,9 @@
 	<section class="section" id="">
 		<div class="container">
 			<div class="row">
-				<div class="col-3" >
+				<div class="col-sm-0 col-lg-3 col-xxl-4">
 				</div>
-				<div class="col-6" >
+				<div class="col-sm-12 col-lg-6 col-xxl-4">
 
 					<div id="calcForm" style="font-size:1.4em">
 						<div class="mb-3">
@@ -246,7 +246,7 @@
 								<span class="input-group-text col-4">
 									Сумма займа
 								</span>
-								<input id="sum" type="number" class="form-control col-8" placeholder="10000">
+								<input id="sum" type="number" class="form-control col-8" placeholder="Введите сумму">
 							</div>
 						</div>
 						<button onclick="calcDeposit()" class="btn btn-warning w-100">
@@ -255,11 +255,12 @@
 
 						<div class="mb-3">
 							<div class="input-group row">
-								<div class="h6 col-4" style="">
-									Ежемесячный платеж, при расчете на 12 месяцев составит:
-								</div>
-								<div id="result" class="col-8 " style="text-align:right">
+								<div class="h6 col-6" style="">
+									Ежемесячный платеж составит:<br />
+									<span class="small">(при расчете на 12 месяцев)</span>
 
+								</div>
+								<div id="result" class="col-6 " style="text-align:right">
 								</div>
 							</div>
 						</div>
@@ -268,7 +269,7 @@
 
 
 				</div>
-				<div class="col-3" >
+				<div class="col-3">
 				</div>
 			</div>
 		</div>

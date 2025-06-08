@@ -29,7 +29,7 @@
 				<br />
 				<br />
 				<!--Таблица результатов-->
-				<h4>Текущие брони</h4>
+			<h4 class="alert alert-primary">Текущие брони</h4>
 				<table class="table table-bordered">
 					<thead>
 						<tr>
@@ -43,7 +43,7 @@
 					</thead>
 					<tbody>
 						@{
-							foreach (var item in Model.Bookings)
+							foreach (var item in Model.FutureBookings)
 							{
 								<tr>
 									<td>@item.Id</td>
@@ -58,6 +58,49 @@
 					</tbody>
 				</table>
 			</div>
+
+
+
+		<br />
+		<br />
+		<br />
+		<div class="row">
+			<div style="text-align:right">
+				<button type="submit" class="btn btn-primary">Обновить таблицу</button>
+			</div>
+
+			<br />
+			<br />
+			<!--Таблица результатов-->
+			<h4 class="alert alert-primary" >Прошедшие брони</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<td>id</td>
+						<td>Месяц</td>
+						<td>Дата</td>
+						<td>Зал</td>
+						<td>Время начала</td>
+						<td>Время окончания</td>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						foreach (var item in Model.PastBookings)
+						{
+							<tr>
+								<td>@item.Id</td>
+								<td>@item.DtBegin.Month</td>
+								<td>@item.DtBegin.Day</td>
+								<td>@item.SpaceName</td>
+								<td>@item.DtBegin.ToString("yyyy-MM-dd_HH:mm")</td>
+								<td>@item.DtEnd.ToString("yyyy-MM-dd_HH:mm")</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
 		
 
 		<br />

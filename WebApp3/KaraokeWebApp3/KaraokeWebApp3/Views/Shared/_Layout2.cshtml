@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -57,10 +58,35 @@
                     <li class="nav-item nav-link">
                         &nbsp;&nbsp;|&nbsp;&nbsp;
                     </li>
-                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для клиента</a></li>
-                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для клиента</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href='@Url.Action("LoginForManager", "Account")'>Вход для менеджера</a></li>
+
+                    @if(User.Identity.IsAuthenticated)
+                    {
+                        //проверяем кто мы
+                        if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role && x.Value == "Client") != null)
+                        {
+                            //это клиент
+                            <li class="nav-item nav-link">
+                                Клиент логин: @User.Identity.Name
+                            </li>
+                        }
+                        else //видимо менеджер
+                        {
+                            <li class="nav-item nav-link">
+                                Менеджер логин: @User.Identity.Name
+                            </li>
+                        }
+
+                        
+                        <li class="nav-item"><a class="nav-link" href='@Url.Action("Logout", "Account")'>Выйти</a></li>
+
+
+                    }
+                    else {
+                        <li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для клиента</a></li>
+                        <li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для клиента</a></li>
+                        <li class="nav-item"><a class="nav-link" href='@Url.Action("LoginForManager", "Account")'>Вход для менеджера</a></li>
+                    }
                 </ul>
             </div>
         </div>
