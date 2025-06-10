@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:40549",
+      "applicationUrl": "http://localhost:4000",
       "sslPort": 0
     }
   },
@@ -11,7 +11,7 @@
     "KaraokeWebApp3": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       //попробуем включить
       "hotReloadEnabled": true,
       "applicationUrl": "http://localhost:5105",

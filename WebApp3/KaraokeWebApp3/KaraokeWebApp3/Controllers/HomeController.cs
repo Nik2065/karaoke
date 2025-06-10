@@ -120,7 +120,7 @@ namespace KaraokeWebApp3.Controllers
                 var e = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                 DateTime e1 = new DateTime(e.Year, e.Month, e.Day, endtime, 0, 0);
 
-                _bookingService.BookClient(userId, b1, e1, zalId);
+                _bookingService.CreateBookByClient(userId, b1, e1, zalId);
             }
             catch (Exception ex)
             {
@@ -163,7 +163,7 @@ namespace KaraokeWebApp3.Controllers
 				var e = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, endtime, 0, 0);
 
-				_bookingService.BookClientByManager(clientId, userId, b1, e1, zalId);
+				_bookingService.CreateBookByManager(clientId, userId, b1, e1, zalId);
 			}
 			catch (Exception ex)
 			{

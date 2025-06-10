@@ -36,7 +36,9 @@ namespace KaraokeWebApp3
         public DateTime DtEnd { get; set;}
         public DateTime Created { get; set;}
 
-        public string SpaceName { get; set; }//название зала
+        //public string SpaceName { get; set; }//название зала
+        public int SpaceId { get; set; }
+
 
 	}
 

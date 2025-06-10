@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KaraokeWebApp3.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KaraokeWebApp3.Controllers
 {
@@ -30,7 +31,45 @@ namespace KaraokeWebApp3.Controllers
 
 			return Json(result);
 		}
+
+
+		[HttpGet]
+		public IActionResult GetBookForSpace(string spaceId)
+		{
+			var result = new GetBookForSpaceResponse { Success = true };
+
+			try
+			{
+				var o = new SearchOptions {
+					TimeType = TimeType.Future,
+					SpaceId = int.Parse(spaceId)
+				};
+
+				var list = _bookingService.GetBookings(o);
+
+
+				result.BookItems = new List<BookItemDto>();
+				result.BookItems = list;
+
+			}
+			catch(Exception ex)
+			{
+				result.Success = false;
+			}
+			return Json(result);
+		}
+
 	}
+
+	public class GetBookForSpaceResponse
+	{
+		//public List<BookItemDto> BookItems { get; set; }
+		public List<BookItemDto> BookItems { get; set; }
+		public bool Success { get; set; }
+	}
+
+
+
 
 	public class DeleteBookItemResponse
 	{

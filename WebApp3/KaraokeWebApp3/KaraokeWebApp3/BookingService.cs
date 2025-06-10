@@ -1,4 +1,6 @@
-﻿namespace KaraokeWebApp3
+﻿using KaraokeWebApp3.Dto;
+
+namespace KaraokeWebApp3
 {
 	public class BookingService
 	{
@@ -9,24 +11,57 @@
 
 		private readonly AppDbContext _db;
 
-		//получаем список бронирований 
-		public List<Booking> GetBookings(SearchOptions options)
+		/// <summary>
+		/// получаем список всех бронирований по фильтру
+		/// </summary>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public List<BookItemDto> GetBookings(SearchOptions options)
 		{
-			var list = _db.Bookings.AsQueryable();
+			var list = from b in _db.Bookings
+					   join s in _db.Spaces on b.SpaceId equals s.Id
+					   select new BookItemDto
+					   {
+						   Id = b.Id,
+						   SpaceId = b.SpaceId,
+						   AuthorId = b.AuthorId,
+						   ClientId = b.ClientId,
+						   Created = b.Created,
+						   DtBegin = b.DtBegin,
+						   DtEnd = b.DtEnd,
+						   SpaceName = s.SpaceName
+					   };
+
+
 			var dtNow = DateTime.Now;
 			if (options.UserId != null)
 			{
-				list = list.Where(x => x.ClientId == options.UserId);
 
-				if(options.TimeType == TimeType.Future)
-				{
-					list = list.Where(x => x.DtBegin >= dtNow);
-				}
-				else if(options.TimeType == TimeType.Past)
-				{
-					list = list.Where(x => x.DtBegin < dtNow);
-				}
+				list = list.Where(x => x.ClientId == options.UserId);
 			}
+
+			if (options.TimeType == TimeType.Future)
+			{
+				list = list.Where(x => x.DtBegin >= dtNow);
+			}
+			else if (options.TimeType == TimeType.Past)
+			{
+				list = list.Where(x => x.DtBegin < dtNow);
+			}
+
+			//по залу
+			if(options.SpaceId != null)
+			{
+				list = list.Where(x => x.SpaceId == options.SpaceId);
+			}
+
+			//var resultList = new List<BookItemDto>();
+			//var spaces = _db.Spaces.ToList();
+
+			/*foreach (var item in list) 
+			{ 
+			
+			}*/
 
 			return list.ToList();
 		}
@@ -60,7 +95,8 @@
 			return list;
 		}
 
-		public void BookClient(int clientId, DateTime begin, DateTime end, int zalId)
+
+		public void CreateBookByClient(int clientId, DateTime begin, DateTime end, int zalId)
 		{
 			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
 
@@ -69,14 +105,23 @@
 			one.AuthorId = clientId;
 			one.DtBegin = begin; one.DtEnd = end;
 			one.Created = DateTime.Now;
-			one.SpaceName = zal?.SpaceName ?? "-";
-
+			//one.SpaceName = zal?.SpaceName ?? "-";
+			one.SpaceId = zalId;
+			
 
 			_db.Bookings.Add(one);
 			_db.SaveChanges();
 		}
 
-		public void BookClientByManager(int clientId, int managerId, DateTime begin, DateTime end, int zalId)
+		/// <summary>
+		/// Создание бронирования менеджером
+		/// </summary>
+		/// <param name="clientId"></param>
+		/// <param name="managerId"></param>
+		/// <param name="begin"></param>
+		/// <param name="end"></param>
+		/// <param name="zalId"></param>
+		public void CreateBookByManager(int clientId, int managerId, DateTime begin, DateTime end, int zalId)
 		{
 			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
 
@@ -85,8 +130,8 @@
 			one.AuthorId = managerId;
 			one.DtBegin = begin; one.DtEnd = end;
 			one.Created = DateTime.Now;
-			one.SpaceName = zal?.SpaceName ?? "-";
-
+			//one.SpaceName = zal?.SpaceName ?? "-";
+			one.SpaceId = zalId;
 
 			_db.Bookings.Add(one);
 			_db.SaveChanges();
@@ -116,6 +161,11 @@
 		public int? UserId { get; set; }
 
 		public TimeType TimeType { get; set; }
+
+		//id зала
+		public int? SpaceId { get; set; }
+
+
 	}
 
 	public enum TimeType

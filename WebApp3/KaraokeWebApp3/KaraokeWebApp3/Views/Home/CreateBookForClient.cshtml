@@ -3,6 +3,68 @@
 }
 @model CreateBookForClientModel
 
+
+@section Head {
+	<script>
+		 function GetBookTable(){
+
+			let tblElement = document.getElementById("bookTable").getElementsByTagName('tbody')[0];
+			let zalId = document.getElementById("zal").value;
+
+			//очищаем список
+			tblElement.innerHTML = "";
+
+			if(zalId == -1) 
+			{
+				return;
+			}
+
+			const url = "/data/GetBookForSpace?spaceId=" + zalId;
+			
+
+			fetch(url)
+			.then(response => response.json())
+			.then(result => {
+				console.log(result);
+				
+				if(result.success) {
+					const h = TblInHtml(result.bookItems);
+					console.log(h);
+					tblElement.innerHTML = h;
+					
+				}
+
+
+			})
+			.catch(error => console.log(error));
+			
+		}
+
+
+
+		function TblInHtml(data){
+			let result = '';
+
+			data.forEach(item => {
+				result += "<tr>";
+				result += "<td>" + item['id'] + "</td>";
+				result += "<td>" + item[1] + "</td>";
+				result += "<td>" + item[2] + "</td>";
+				result += "<td>" + item[3] + "</td>";
+				result += "</tr>"
+			});
+
+			return result;
+		}
+
+
+	</script>
+
+
+}
+
+
+
 <div class="card">
 	<div class="card-body">
 		<h4 class="card-title">Создать бронирование</h4>
@@ -19,7 +81,7 @@
 
 					<div class="mb-3">
 						<label for="formGroupExampleInput2" class="form-label">Зал</label>
-						<select name="zalId" class="form-select">
+						<select id="zal" name="zalId" class="form-select" onchange="GetBookTable()">
 							@{
 								<option value="-1" selected>Выберите зал из списка</option>
 								foreach (var s in Model.Spaces)
@@ -81,6 +143,36 @@
 				</div>
 				<div class="col-3"></div>
 				
+			</div>
+
+			<div>
+				<h6>Выберите зал, тут будут отображаться ближайшие брони этого зала</h6>
+				<table id="bookTable" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<td>Дата начала бронирования</td>
+							<td>Время окончания бронирования</td>
+							<td>Длительность</td>
+						</tr>
+					</thead>
+					<tbody >
+						
+					</tbody>
+				</table>
+			</div>
+
+			<br/>
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<h6>Правила бронирования</h6>
+					+ Забронировать можно зал можно только в период работы караоке: c 10.00 до 0.00
+					<br/>
+					+ Максимальный период бронирования - 5 часов
+					<br/>
+					+ Нельзя забронировать время которое пересекается с чужой бронью
+				</div>
+
 			</div>
 
 		</form>
