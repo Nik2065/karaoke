@@ -1,5 +1,7 @@
 ﻿using KaraokeWebApp3.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace KaraokeWebApp3.Controllers
 {
@@ -59,6 +61,33 @@ namespace KaraokeWebApp3.Controllers
 			return Json(result);
 		}
 
+		[HttpGet]
+		[Authorize]
+		public IActionResult CheckBookParams(string spaceId, string begin, string end)
+		{
+			var result = new CheckBookParamsResponse { Success = true };
+
+			try
+			{
+				var b = DateTime.ParseExact(begin, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				var e = DateTime.ParseExact(end, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+				_bookingService.CheckBookParams(b, e, int.Parse(spaceId));
+			}
+			catch(CheckException ex)
+			{
+				result.Success=false;
+				result.Msg = ex.Message;
+			}
+			catch (Exception ex)
+			{
+				//result.
+			}
+
+
+			return Json(result);
+		}
+
 	}
 
 	public class GetBookForSpaceResponse
@@ -69,7 +98,13 @@ namespace KaraokeWebApp3.Controllers
 	}
 
 
+	public class CheckBookParamsResponse
+	{
+		public bool CanUseThisParams { get; set; }
+		public bool Success { get; set; }
+		public string Msg { get; set; }
 
+	}
 
 	public class DeleteBookItemResponse
 	{

@@ -66,9 +66,43 @@ namespace KaraokeWebApp3
 			return list.ToList();
 		}
 
+		//максимальный период бронирования
+		private decimal MaxDurationInHours = 5;
+
+		public void CheckBookParams(DateTime begin, DateTime end, int spaceId)
+		{
+			//bool result = false;
+			
+			
+			
+			//проверка длительности
+			var duration = (end - begin).Hours;
+			if (duration > MaxDurationInHours)
+				throw new CheckException($"Выбрана слишком большая (более {MaxDurationInHours} часов) длительность бронирования. Уменьшите период");
+
+			
+
+			var list = _db.Bookings.Where(x => x.SpaceId == spaceId);
+
+			foreach (var item in list)
+			{
+				if (
+					(begin < item.DtBegin && end <= item.DtBegin)
+					|| (begin >= item.DtEnd && end > item.DtEnd))
+				{
+					//не пересекается с бронями 
+				}
+				else
+				{
+					//пересекается. выходим
+					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры бронивароя");
+				}
+
+			}
 
 
-
+			//return result;
+		}
 
 
 		public List<User> GetUsers()
@@ -173,5 +207,19 @@ namespace KaraokeWebApp3
 		All = 0,
 		Future = 1,
 		Past = 2
+	}
+
+	public class CheckCheckBookParamsResult
+	{
+		public string Msg = "";
+		public bool Success = false;
+	}
+
+	public class CheckException : Exception
+	{
+		public CheckException(string msg): base(msg)
+		{
+
+		}
 	}
 }

@@ -200,5 +200,17 @@ namespace KaraokeWebApp3.Controllers
 			return View();
 		}
 
+        [HttpGet]
+        public IActionResult KoreanEvenings()
+        {
+			return View();
+		}
+
+
+		[HttpGet]
+		public IActionResult RetroEvenings()
+        {
+            return View();
+        }
 	}
 }

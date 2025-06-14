@@ -19,11 +19,10 @@
         public void ConfigureServices(IServiceCollection services)
         {
             // Настройка базы данных
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))
-                ));
+            var conn = Configuration.GetConnectionString("DefaultConnection");
+
+			services.AddDbContext<AppDbContext>(options =>
+                options.UseMySql(conn, ServerVersion.AutoDetect(conn)));
 
             // Настройка аутентификации
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

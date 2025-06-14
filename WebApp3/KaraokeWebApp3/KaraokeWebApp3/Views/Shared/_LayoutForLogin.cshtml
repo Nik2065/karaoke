@@ -40,6 +40,20 @@
             z-index: 2;
         }
     </style>
+
+    <!--футер-->
+    <style>
+        .footer-container {
+            display: flex; /* Создаем гибкую структуру */
+            flex-direction: column; /* Располагаем элементы вертикально */
+            min-height: 50vh; /* Минимальная высота равна высоте вьюпорта */
+        }
+
+        .myfooter {
+            margin-top: auto; /* Здесь вступает в действие магия Flexbox */
+        }
+    </style>
+
 </head>
 <body class="bg-dark text-light">
     <!-- Навигация -->
@@ -63,6 +77,13 @@
 
     <div class="container" style="color:black">
             @RenderBody()
+    </div>
+
+    <div class="footer-container ">
+        <!-- Здесь подразумевается место для содержимого -->
+        <footer class="myfooter text-center bg-dark text-white py-4">
+            <p class="mb-0">© 2025 Karaoke Hollywood. Все права защищены</p>
+        </footer>
     </div>
 
 

@@ -14,7 +14,7 @@
       "launchBrowser": false,
       //попробуем включить
       "hotReloadEnabled": true,
-      "applicationUrl": "http://localhost:5105",
+      "applicationUrl": "http://localhost:4000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

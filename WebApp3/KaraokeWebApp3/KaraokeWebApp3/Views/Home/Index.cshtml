@@ -44,6 +44,75 @@
             z-index: 2;
         }
     </style>
+    <!--стили для отзывов-->
+    <style>
+        .testimonials {
+            /*background-color: #f8f9fa;*/
+            padding: 80px 0;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+            color: black;
+        }
+
+        .testimonial-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #f0f0f0;
+        }
+
+        .quote-icon {
+            color: #6c757d;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+            background: none;
+            border: none;
+        }
+
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            padding: 15px;
+        }
+
+        .carousel-indicators button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 5px;
+            background-color: #6c757d;
+        }
+
+        .carousel-indicators .active {
+            background-color: #0d6efd;
+        }
+    </style>
+    <!--футер-->
+    <style>
+        .footer-container {
+            display: flex; /* Создаем гибкую структуру */
+            flex-direction: column; /* Располагаем элементы вертикально */
+            min-height: 8vh; /* Минимальная высота равна высоте вьюпорта */
+        }
+
+        .myfooter {
+            margin-top: auto; /* Здесь вступает в действие магия Flexbox */
+        }
+    </style>
+
 </head>
 <body class="bg-dark text-light">
     <!-- Навигация -->
@@ -94,9 +163,9 @@
                         <span class="discount-badge bg-danger text-white px-3 py-1 rounded-pill">-20%</span>
                         <img src="/img/90h.jpg" class="img-fluid rounded-3 mb-3">
                         <h3>Ретро-вечер 90-х</h3>
-                        <p class="text-muted">25 июня 2024 | 19:00</p>
+                        <p class="text-muted">27 июня 2025 | 19:00</p>
                         <p>Окунитесь в атмосферу 90-х с лучшими хитами десятилетия!</p>
-                        <button class="btn btn-outline-dark">Подробнее</button>
+                        <a href='@Url.Action("RetroEvenings")' class="btn btn-outline-dark">Подробнее</a>
                     </div>
                 </div>
 
@@ -105,9 +174,9 @@
                     <div class="event-card text-dark p-4 rounded-3">
                         <img src="/img/k-pop.jpg" class="img-fluid rounded-3 mb-3">
                         <h3>K-Pop Night</h3>
-                        <p class="text-muted">28 июня 2024 | 20:00</p>
+                        <p class="text-muted">28 июля 2025 | 20:00</p>
                         <p>Все самые популярные корейские хиты в одном вечере!</p>
-                        <button class="btn btn-outline-dark">Подробнее</button>
+                        <a href='@Url.Action("KoreanEvenings")' class="btn btn-outline-dark">Подробнее</a>
                     </div>
                 </div>
 
@@ -120,7 +189,14 @@
                             <small>Используй промокод:</small>
                             <div class="fw-bold">FRIENDS30</div>
                         </div>
-                        <button class="btn btn-light">Условия акции</button>
+                        <button class="btn btn-light"
+                                type="button" data-bs-toggle="modal"
+                                data-bs-target="#myModal">
+                                Условия акции
+                        </button>
+
+
+
                     </div>
                 </div>
             </div>
@@ -149,10 +225,162 @@
         </div>
     </section>
 
+    <section class="testimonials">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold mb-3">Отзывы наших клиентов</h2>
+                    <p class="lead text-muted">Что говорят о нашей работе</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <!-- Индикаторы -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Отзыв 1"></button>
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Отзыв 2"></button>
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Отзыв 3"></button>
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="3" aria-label="Отзыв 4"></button>
+                            <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="4" aria-label="Отзыв 5"></button>
+                        </div>
+
+                        <!-- Слайды с отзывами -->
+                        <div class="carousel-inner">
+                            <!-- Отзыв 1 -->
+                            <div class="carousel-item active">
+                                <div class="testimonial-card text-center">
+                                    <i class="bi bi-chat-square-quote quote-icon"></i>
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Анна Иванова" class="testimonial-img">
+                                    <p class="mb-4 fs-5">"Отличный сервис! Быстро и качественно выполнили работу. Очень довольна результатом и буду рекомендовать вас своим друзьям и коллегам."</p>
+                                    <h5 class="fw-bold mb-1">Анна Иванова</h5>
+                                    <p class="text-muted">Директор ООО "Технологии"</p>
+                                </div>
+                            </div>
+
+                            <!-- Отзыв 2 -->
+                            <div class="carousel-item">
+                                <div class="testimonial-card text-center">
+                                    <i class="bi bi-chat-square-quote quote-icon"></i>
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Петр Смирнов" class="testimonial-img">
+                                    <p class="mb-4 fs-5">"Профессиональный подход к делу. Сотрудники компании всегда на связи, готовы помочь и ответить на все вопросы. Работа выполнена в срок и с отличным результатом."</p>
+                                    <h5 class="fw-bold mb-1">Петр Смирнов</h5>
+                                    <p class="text-muted">Основатель StartUp</p>
+                                </div>
+                            </div>
+
+                            <!-- Отзыв 3 -->
+                            <div class="carousel-item">
+                                <div class="testimonial-card text-center">
+                                    <i class="bi bi-chat-square-quote quote-icon"></i>
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Мария Петрова" class="testimonial-img">
+                                    <p class="mb-4 fs-5">"Сотрудничаем уже несколько лет. Всегда получаем именно то, что ожидаем, а часто даже больше. Гибкие условия и индивидуальный подход к каждому клиенту."</p>
+                                    <h5 class="fw-bold mb-1">Мария Петрова</h5>
+                                    <p class="text-muted">Маркетолог</p>
+                                </div>
+                            </div>
+
+                            <!-- Отзыв 4 -->
+                            <div class="carousel-item">
+                                <div class="testimonial-card text-center">
+                                    <i class="bi bi-chat-square-quote quote-icon"></i>
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Иван Кузнецов" class="testimonial-img">
+                                    <p class="mb-4 fs-5">"Быстро реагируют на запросы, качество услуг на высоте. Всегда приятно иметь дело с профессионалами своего дела. Рекомендую всем!"</p>
+                                    <h5 class="fw-bold mb-1">Иван Кузнецов</h5>
+                                    <p class="text-muted">IT-специалист</p>
+                                </div>
+                            </div>
+
+                            <!-- Отзыв 5 -->
+                            <div class="carousel-item">
+                                <div class="testimonial-card text-center">
+                                    <i class="bi bi-chat-square-quote quote-icon"></i>
+                                    <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Ольга Семенова" class="testimonial-img">
+                                    <p class="mb-4 fs-5">"Приятно удивлена уровнем сервиса. Все четко, по делу, без лишней воды. Особенно хочу отметить вежливость и компетентность сотрудников."</p>
+                                    <h5 class="fw-bold mb-1">Ольга Семенова</h5>
+                                    <p class="text-muted">Дизайнер</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопки навигации -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Предыдущий</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Следующий</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-container ">
+        <!-- Здесь подразумевается место для содержимого -->
+        <footer class="myfooter text-center bg-dark text-white py-4">
+            <p class="mb-0">© 2025 Karaoke Hollywood. Все права защищены</p>
+        </footer>
+    </div>
+
+
+    <!--условия акции-->
+    <div class="modal fade" id="myModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">Акция 30% на весь вечер</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                   <div class="row g-3">
+                       <div class="col-12">
+                        <h4>
+                            🔥 Горячее предложение! 🔥
+                        </h4>
+                        <h4>🎤 ПРИВЕДИ 3 ДРУЗЕЙ – ПОЛУЧИ 30% СКИДКУ НА ВЕСЬ ВЕЧЕР! 🎤</h4>
+
+                        Собирай свою самую громкую компанию! Приводи трёх друзей в наш караоке-клуб – и весь ваш вечер станет на 30% дешевле!
+                        <br/>
+
+                        Почему это выгодно:<br/>
+                        ✅Скидка действует на весь счёт: аренда зала, напитки, закуски<br />
+                        ✅Можно петь сколько угодно – скидка сохраняется весь вечер<br />
+                        ✅ Чем больше друзей – тем громче песни и больше экономия!<br />
+                        <strong>
+                        Как получить скидку?
+                        </strong>
+
+                        <ol>
+                            <li>
+                                Собери команду из 4 человек (ты + 3 друга)
+                            </li>
+
+                            <li>Забронируй столик по телефону или онлайн</li>
+
+                            <li>При заказе скажи администратору: "Мы по акции 3+1! и назови код акции"</li>
+                        </ol>
+
+                        Не упусти выгоду!
+                        ✨ Идеально для дней рождения, корпоративов и пятничных отрывов
+                        ✨ Дополнительный бонус: именинник + торт в подарок! (Уточни детали)
+                        </div>
+                   </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
-    <!-- Добавить это перед закрывающим тегом </body> -->
+    <!-- форму не используем-->
+    <!-- Добавить это перед закрывающим тегом body -->
     <!-- Модальное окно бронирования -->
     <div class="modal fade" id="bookingModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
