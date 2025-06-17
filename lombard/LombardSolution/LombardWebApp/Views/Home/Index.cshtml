@@ -1,45 +1,81 @@
 ﻿@{
 	ViewData["Title"] = "Home Page";
-	Layout = null;
+	Layout = "_Layout2";
 }
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>GoldSafe - Ломбард</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+	@section Head {
+
+	<!--стили для отзывов-->
 	<style>
-		.hero-section {
-			background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('./img/main_banner.jpg') center/cover;
-			height: 70vh;
-			color: white;
+		.testimonials {
+			/*background-color: #f8f9fa;*/
+			padding: 80px 0;
 		}
 
-		.icon-box {
-			width: 60px;
-			height: 60px;
+		.testimonial-card {
+			background: white;
+			border-radius: 10px;
+			padding: 30px;
+			box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+			max-width: 800px;
+			margin: 0 auto;
+			color: black;
 		}
 
-		.section {
-			padding: 5rem 0;
+		.testimonial-img {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-bottom: 20px;
+			border: 4px solid #f0f0f0;
 		}
 
-		.bg-light-gray {
-			background-color: #f8f9fa;
+		.quote-icon {
+			color: #6c757d;
+			font-size: 2rem;
+			margin-bottom: 20px;
 		}
 
-		.navFont {
-			font-size: 1.2rem;
+		.carousel-control-prev, .carousel-control-next {
+			width: 5%;
+			background: none;
+			border: none;
+		}
+
+		.carousel-control-prev-icon, .carousel-control-next-icon {
+			background-color: rgba(0,0,0,0.3);
+			border-radius: 50%;
+			padding: 15px;
+		}
+
+		.carousel-indicators button {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			margin: 0 5px;
+			background-color: #6c757d;
+		}
+
+		.carousel-indicators .active {
+			background-color: #0d6efd;
 		}
 	</style>
+
+
+
 	<script>
 
 		function sendForm(){
 			const name = document.getElementById("name").value;
 			const phone = document.getElementById("phone").value;
+			if(name.length == 0)
+				return;
+
+			if(phone.length == 0)
+				return;
+
 			let contactForm = document.getElementById("contactForm");
 
 
@@ -112,29 +148,35 @@
 		}
 
 
-	</script>
-</head>
-<body>
-	<!-- Навигация -->
-	<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
-		<div class="container navFont">
-			<a class="navbar-brand fw-bold text-warning " style="font-size:2rem" href="#">GoldSafe</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav ms-auto">
-					<li class="nav-item"><a class="nav-link" href="#about">О нас</a></li>
-					<li class="nav-item"><a class="nav-link" href="#services">Услуги</a></li>
-					<li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
-					<li class="nav-item nav-link">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</li>
+		function onChangeName(){
 
-					<li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для менеджера</a></li>
-					@*<li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для менеджера</a></li>*@
-				</ul>
-			</div>
-		</div>
-	</nav>
+		}
+
+		document.addEventListener('DOMContentLoaded', () => {
+			// Весь код, расположенный здесь, будет выполнен сразу после готовности DOM
+			
+			document.getElementById('name').addEventListener('input', function() {
+			  const regex = /[^a-zA-Zа-яА-Я\s]/g; // Инвертированный шаблон
+			  if (regex.test(this.value)) {
+				this.value = this.value.replace(regex, ''); // Удалить запрещённые символы
+			  }
+			});
+
+			document.getElementById('phone').addEventListener('input', function() {
+			  const regex = /[^0-9+]/g; // Инвертированный шаблон
+			  if (regex.test(this.value)) {
+				this.value = this.value.replace(regex, ''); // Удалить запрещённые символы
+			  }
+			});
+
+		});
+
+	</script>
+	}
+
+
+
+	<!--Основные данные страницы -->
 
 	<!-- Герой-секция -->
 	<section class="hero-section d-flex align-items-center">
@@ -146,7 +188,7 @@
 	</section>
 
 	<!-- Преимущества -->
-	<section class="section bg-light-gray" id="services">
+	<section class="section bg-light-gray" id="">
 		<div class="container">
 			<h2 class="text-center mb-5">Наши преимущества</h2>
 			<div class="row g-4">
@@ -218,6 +260,64 @@
 		</div>
 	</section>
 
+	<section class="section" id="services">
+		<div class="container">
+		<h2 class="text-center mb-5">Сдавайте товары на выгодных условиях</h2>
+
+			<br/>
+
+			<div class="row">
+			<div class="col-sm-6 col-lg-3">
+				<div class="card" style="width: 100%; margin-bottom:10px;">
+					<img src="~/img/gold_4.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<a href='@Url.Action("Gold")' >
+							<h5 class="card-title">Ювелирные изделия</h5>
+						</a>
+
+
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-3">
+				<div class="card" style="width: 100%; margin-bottom:10px;">
+					<img src="~/img/laptop_2.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<a href='@Url.Action("Laptop")'>
+							<h5 class="card-title">Компьютеры и ноутбуки</h5>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 col-lg-3">
+				<div class="card" style="width: 100%; margin-bottom:10px;">
+					<img src="~/img/smartphone_5.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<a href='@Url.Action("Smart")'>
+							<h5 class="card-title">Смартфоны и планшеты</h5>
+						</a>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-6 col-lg-3">
+				<div class="card" style="width: 100%; margin-bottom:10px;">
+					<img src="~/img/shur_1.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<a href='@Url.Action("Shur")'>
+							<h5 class="card-title">Электроинструмент</h5>
+						</a>
+
+
+					</div>
+				</div>
+			</div>
+
+			</div>
+		</div>
+	</section>
 
 	<!-- рассчет займа  -->
 	<section class="section" id="">
@@ -226,7 +326,7 @@
 				<div class="col-sm-0 col-lg-3 col-xxl-4">
 				</div>
 				<div class="col-sm-12 col-lg-6 col-xxl-4">
-
+					<h5 class="text-center">Рассчитайте предварительный платеж онлайн</h5>
 					<div id="calcForm" style="font-size:1.4em">
 						<div class="mb-3">
 							<div class="input-group">
@@ -255,12 +355,12 @@
 
 						<div class="mb-3">
 							<div class="input-group row">
-								<div class="h6 col-6" style="">
+								<div class="h6 col-8" style="">
 									Ежемесячный платеж составит:<br />
 									<span class="small">(при расчете на 12 месяцев)</span>
 
 								</div>
-								<div id="result" class="col-6 " style="text-align:right">
+								<div id="result" class="col-4 " style="text-align:right">
 								</div>
 							</div>
 						</div>
@@ -276,25 +376,105 @@
 	</section>
 
 
+	<section class="testimonials">
+		<div class="container">
+			<div class="row justify-content-center mb-5">
+				<div class="col-lg-8 text-center">
+					<h2 class="fw-bold mb-3">Отзывы наших клиентов</h2>
+					<p class="lead text-muted">Что говорят о нашей работе</p>
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="col-12">
+					<div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+						<!-- Индикаторы -->
+						<div class="carousel-indicators">
+							<button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Отзыв 1"></button>
+							<button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Отзыв 2"></button>
+							<button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Отзыв 3"></button>
+							<button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="3" aria-label="Отзыв 4"></button>
+							<button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="4" aria-label="Отзыв 5"></button>
+						</div>
 
-	<!-- Контакты -->
+						<!-- Слайды с отзывами -->
+						<div class="carousel-inner">
+							<!-- Отзыв 1 -->
+							<div class="carousel-item active">
+								<div class="testimonial-card text-center">
+									<i class="bi bi-chat-square-quote quote-icon"></i>
+									<img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Анна Иванова" class="testimonial-img">
+									<p class="mb-4 fs-5">"Отличный сервис! Быстро и качественно выполнили работу. Очень довольна результатом и буду рекомендовать вас своим друзьям и коллегам."</p>
+									<h5 class="fw-bold mb-1">Анна Иванова</h5>
+									<p class="text-muted">Директор ООО "Технологии"</p>
+								</div>
+							</div>
+
+							<!-- Отзыв 2 -->
+							<div class="carousel-item">
+								<div class="testimonial-card text-center">
+									<i class="bi bi-chat-square-quote quote-icon"></i>
+									<img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Петр Смирнов" class="testimonial-img">
+									<p class="mb-4 fs-5">"Профессиональный подход к делу. Сотрудники компании всегда на связи, готовы помочь и ответить на все вопросы. Работа выполнена в срок и с отличным результатом."</p>
+									<h5 class="fw-bold mb-1">Петр Смирнов</h5>
+									<p class="text-muted">Основатель StartUp</p>
+								</div>
+							</div>
+
+							<!-- Отзыв 3 -->
+							<div class="carousel-item">
+								<div class="testimonial-card text-center">
+									<i class="bi bi-chat-square-quote quote-icon"></i>
+									<img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Мария Петрова" class="testimonial-img">
+									<p class="mb-4 fs-5">"Сотрудничаем уже несколько лет. Всегда получаем именно то, что ожидаем, а часто даже больше. Гибкие условия и индивидуальный подход к каждому клиенту."</p>
+									<h5 class="fw-bold mb-1">Мария Петрова</h5>
+									<p class="text-muted">Маркетолог</p>
+								</div>
+							</div>
+
+							<!-- Отзыв 4 -->
+							<div class="carousel-item">
+								<div class="testimonial-card text-center">
+									<i class="bi bi-chat-square-quote quote-icon"></i>
+									<img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Иван Кузнецов" class="testimonial-img">
+									<p class="mb-4 fs-5">"Быстро реагируют на запросы, качество услуг на высоте. Всегда приятно иметь дело с профессионалами своего дела. Рекомендую всем!"</p>
+									<h5 class="fw-bold mb-1">Иван Кузнецов</h5>
+									<p class="text-muted">IT-специалист</p>
+								</div>
+							</div>
+
+							<!-- Отзыв 5 -->
+							<div class="carousel-item">
+								<div class="testimonial-card text-center">
+									<i class="bi bi-chat-square-quote quote-icon"></i>
+									<img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Ольга Семенова" class="testimonial-img">
+									<p class="mb-4 fs-5">"Приятно удивлена уровнем сервиса. Все четко, по делу, без лишней воды. Особенно хочу отметить вежливость и компетентность сотрудников."</p>
+									<h5 class="fw-bold mb-1">Ольга Семенова</h5>
+									<p class="text-muted">Дизайнер</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Кнопки навигации -->
+						<button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Предыдущий</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+							<span class="visually-hidden">Следующий</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<section class="section bg-light-gray" id="contacts">
 		<div class="container">
 			<div class="row g-5">
-				<div class="col-md-6">
-					<h2 class="mb-4">Наши контакты</h2>
-					<ul class="list-unstyled">
-						<li class="mb-3">
-							<strong>Адрес:</strong> г. Красноярск, улица Матросова 3
-						</li>
-						<li class="mb-3">
-							<strong>Телефон:</strong> +7 (495) 123-45-67
-						</li>
-						<li class="mb-3">
-							<strong>Часы работы:</strong> Пн-Пт: 9:00-20:00
-						</li>
-					</ul>
+				<div class="col-md-3">
+
 				</div>
 				<div class="col-md-6">
 					<!--form-->
@@ -316,7 +496,7 @@
 							</div>
 						</div>
 						<button onclick="sendForm()" class="btn btn-warning w-100">
-							<i class="bi bi-envelope-check me-2"></i>Заказать звонок
+						<i class="bi bi-telephone-fill me-2"></i>Заказать звонок
 						</button>
 					</div>
 					<!--/form-->
@@ -325,18 +505,32 @@
 		</div>
 	</section>
 
-	<!-- Футер -->
-	<footer class="bg-dark text-white py-4">
-		<div class="container text-center">
-			<div class="mb-3">
-				<a href="#" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
-				<a href="#" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
-				<a href="#" class="text-white"><i class="bi bi-whatsapp fs-4"></i></a>
-			</div>
-			<p class="mb-0">© 2023 GoldSafe. Все права защищены</p>
-		</div>
-	</footer>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+	<!-- Контакты -->
+	<section class="section bg-light-gray" id="contacts">
+		<div class="container">
+			<div class="row g-5">
+				<div class="col-md-6">
+					<h2 class="mb-4">Наши контакты</h2>
+					<ul class="list-unstyled">
+						<li class="mb-3">
+							<strong>Адрес:</strong> г. Красноярск, улица Матросова, 3
+						</li>
+						<li class="mb-3">
+							<strong>Телефон:</strong> +7 (391) 240-06-60
+						</li>
+						<li class="mb-3">
+							<strong>Часы работы:</strong> Пн-Пт: 9:00-20:00
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<iframe id="map_334235403" frameborder="0" width="100%" height="300px" 
+					src="https://makemap.2gis.ru/widget?data=eJw1jsFqwzAQRP9lezXBlq1IMvSa0ksJhVJwycG1lkQge428gSbG_9610-5x3uzMzEDJY0L_gtQjp4AT1F8z8G1EqOGALV8TQgZjohETb3yGjiIl4U-qxO_SC-fAcf14V25qDm-Xpv94Ftnj1KUwcqBBoAj318HjD9RF_n9LBudH-W2N_ms-UhhY_B3JwDC0vA1zametzfN9pvXOWeuUOcl_8FDvbbWcMujb8UhTeBTOEFuGevOaXBfGaq2tsRnEFa9pxhTKOOWqSlWi34l6GVdKqAynGD8viLHZVE5XXH4BwIZdlw" sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"></iframe>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+ 

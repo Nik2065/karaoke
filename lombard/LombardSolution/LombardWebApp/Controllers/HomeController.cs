@@ -38,5 +38,35 @@ namespace LombardWebApp.Controllers
             return View(model);
 		}
 
-    }
+		[HttpGet]
+		public IActionResult About()
+		{
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Laptop()
+		{
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Shur()
+		{
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Smart()
+		{
+			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Gold()
+		{
+			return View();
+		}
+
+	}
 }

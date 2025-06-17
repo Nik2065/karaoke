@@ -33,7 +33,7 @@
         .footer-container {
             display: flex; /* Создаем гибкую структуру */
             flex-direction: column; /* Располагаем элементы вертикально */
-            min-height: 100vh; /* Минимальная высота равна высоте вьюпорта */
+            min-height: 20vh; /* Минимальная высота равна высоте вьюпорта */
         }
 
         .myfooter {
@@ -41,6 +41,9 @@
         }
 
     </style>
+
+    @RenderSection("Head", false)
+
 </head>
 <body>
     <!-- Навигация -->
@@ -52,6 +55,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Index", "Home")#about'>О нас</a></li>
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Index", "Home")#services'>Услуги</a></li>
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("Index", "Home")#contacts'>Контакты</a></li>
+                    <li class="nav-item"><a class="nav-link" href='@Url.Action("About", "Home")'>О программе</a></li>
+
+                    <li class="nav-item nav-link">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</li>
 
                     @{
                         if(User.Identity.IsAuthenticated)
@@ -65,7 +75,6 @@
                         }
                         else
                         {
-                            <li class="nav-item nav-link">&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</li>
 					        <li class="nav-item"><a class="nav-link" href='@Url.Action("Login", "Account")'>Вход для менеджера</a></li>
 					        //<li class="nav-item"><a class="nav-link" href='@Url.Action("Register", "Account")'>Регистрация для менеджера</a></li>
                         }
@@ -87,7 +96,7 @@
     <div class="footer-container ">
         <!-- Здесь подразумевается место для содержимого -->
         <footer class="myfooter text-center bg-dark text-white py-4">
-            <p class="mb-0">© 2023 GoldSafe. Все права защищены</p>
+            <p class="mb-0">© 2025 GoldSafe. Все права защищены</p>
         </footer>
     </div>
 
