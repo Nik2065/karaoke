@@ -30,7 +30,7 @@ namespace KaraokeWebApp3
 		public List<BookItemDto> GetBookings(SearchOptions options)
 		{
 			//ограничиваем период поиска до X дней вперед
-			var future = DateTime.Now.AddDays(_futureBookingPeriod);
+			var future = DateTime.Now.Date.AddDays(_futureBookingPeriod);
 
 
 			var list = from b in _db.Bookings.Where(x => x.DtBegin <= future)
@@ -48,7 +48,7 @@ namespace KaraokeWebApp3
 					   };
 
 
-			var dtNow = DateTime.Now;
+			//var dtNow = DateTime.Now;
 			if (options.UserId != null)
 			{
 
@@ -73,17 +73,121 @@ namespace KaraokeWebApp3
 			//var resultList = new List<BookItemDto>();
 			//var spaces = _db.Spaces.ToList();
 
-
-			return list.OrderBy(x=>x.DtBegin).ToList();
+			var result = list.OrderBy(x => x.DtBegin).ToList();
+			return result;
 		}
+
+
+		//незабронированное время на весь следующий период
+		//начало работы караоке 10.00
+		//конец работы караоке 00.00
+		public List<NotBookItemDto> GetNotBookings(List<BookItemDto> bookItems, int spaceId)
+		{
+			var notBookings = new List<NotBookItemDto>();
+			var spaces = _db.Spaces.ToList();
+
+			var duration = 14;//часов в день
+			
+
+			for (int d = 0; d < _futureBookingPeriod; d++)
+			{
+				//стартовый час
+				var currentWorkHour = DateTime.Now.Date.AddDays(d).AddHours(10);
+				for (int i = 0; i < duration; i++)
+				{
+
+					var n = new NotBookItemDto {
+						DtBegin = currentWorkHour.AddHours(i), 
+						DtEnd = currentWorkHour.AddHours(i + 1),
+						SpaceId  = spaceId,
+						SpaceName = spaces.FirstOrDefault(y=>y.Id==spaceId)?.SpaceName ?? ""
+					};
+					//если уже забронировано - не добавляем в список
+					if (!AlreadyTaken(n.DtBegin, n.DtEnd, bookItems, spaceId))
+						notBookings.Add(n);
+				}
+			}
+
+			return notBookings;
+		}
+
+
+
+		//Проверка:Пересекается с уже забрнированным временем
+		//periodBegin, periodEnd - проверяемый период
+		public bool AlreadyTaken(DateTime periodBegin, DateTime periodEnd, List<BookItemDto> bookings, int spaceId)
+		{
+			var result = false;
+
+
+			//var list = _db.Bookings.Where(x => x.SpaceId == spaceId);
+
+			foreach (var item in bookings)
+			{
+
+				//if (periodBegin >= item.DtBegin && periodBegin >= item.DtEnd && 
+				//	periodEnd<=item.DtBegin && periodEnd <= item.DtEnd)
+
+				if(periodBegin>item.DtBegin && periodBegin<item.DtEnd
+					|| periodBegin>=item.DtBegin && periodEnd<=item.DtEnd
+					|| periodEnd<item.DtBegin && periodEnd>item.DtEnd
+					)
+				{
+					result = true;
+					break;
+				}
+
+				/*if (
+					(periodBegin < item.DtBegin && periodEnd <= item.DtBegin)
+					|| (periodBegin >= item.DtEnd && periodEnd > item.DtEnd))
+				{
+					//не пересекается с бронями 
+				}
+				else
+				{
+					//пересекается. выходим
+					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры бронивароя");
+				}*/
+
+			}
+
+
+			return result;
+		}
+
+
+		public bool AlreadyTaken(DateTime periodBegin, DateTime periodEnd, int spaceId)
+		{
+			var result = false;
+			var bookings = _db.Bookings.Where(x => x.SpaceId == spaceId);
+
+			foreach (var item in bookings)
+			{
+				//if (periodBegin >= item.DtBegin && periodBegin >= item.DtEnd && 
+				//	periodEnd<=item.DtBegin && periodEnd <= item.DtEnd)
+
+				if (periodBegin > item.DtBegin && periodBegin < item.DtEnd
+					|| periodBegin >= item.DtBegin && periodEnd <= item.DtEnd
+					|| periodEnd < item.DtBegin && periodEnd > item.DtEnd
+					)
+				{
+					result = true;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+
 
 		//максимальный период бронирования
 		//private decimal MaxDurationInHours = 5;
-
-		public void CheckBookParams(DateTime begin, DateTime end, int spaceId)
+		//todo
+		public bool CheckBookParams(int userId, DateTime begin, DateTime end, int spaceId)
 		{
-			//bool result = false;
-			
+			bool result = false;
+			//var boo
 			
 			
 			//проверка длительности
@@ -92,28 +196,17 @@ namespace KaraokeWebApp3
 				throw new CheckException($"Выбрана слишком большая (более {_maxDurationInHours} часов) длительность бронирования. Уменьшите период");
 
 			
+			if(AlreadyTaken(begin, end, spaceId))
+					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры");
 
-			var list = _db.Bookings.Where(x => x.SpaceId == spaceId);
-
-			foreach (var item in list)
-			{
-				if (
-					(begin < item.DtBegin && end <= item.DtBegin)
-					|| (begin >= item.DtEnd && end > item.DtEnd))
-				{
-					//не пересекается с бронями 
-				}
-				else
-				{
-					//пересекается. выходим
-					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры бронивароя");
-				}
-
-			}
-
-
-			//return result;
+			return result;
 		}
+
+		//создать бронирование
+		/*public void CreateBookItem(DateTime begin, DateTime end, int spaceId)
+		{
+
+		}*/
 
 
 		public List<User> GetUsers()
@@ -141,18 +234,24 @@ namespace KaraokeWebApp3
 		}
 
 
-		public void CreateBookByClient(int clientId, DateTime begin, DateTime end, int zalId)
+		/// <summary>
+		/// Создение бронирования клиентом
+		/// </summary>
+		/// <param name="clientId"></param>
+		/// <param name="begin"></param>
+		/// <param name="end"></param>
+		/// <param name="zalId"></param>
+		public void CreateBookByClient(int clientId, DateTime begin, DateTime end, int spaceId)
 		{
-			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
+			var zal = _db.Spaces.FirstOrDefault(x => x.Id == spaceId);
 
 			var one = new Booking();
 			one.ClientId = clientId;
 			one.AuthorId = clientId;
-			one.DtBegin = begin; one.DtEnd = end;
+			one.DtBegin = begin; 
+			one.DtEnd = end;
 			one.Created = DateTime.Now;
-			//one.SpaceName = zal?.SpaceName ?? "-";
-			one.SpaceId = zalId;
-			
+			one.SpaceId = spaceId;
 
 			_db.Bookings.Add(one);
 			_db.SaveChanges();

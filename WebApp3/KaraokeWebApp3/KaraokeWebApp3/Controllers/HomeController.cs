@@ -106,7 +106,7 @@ namespace KaraokeWebApp3.Controllers
 			var model = new CreateBookForClientModel();
 			model.Spaces = _bookingService.GetSpaces();
             var so = new SearchOptions { 
-                BeginPeriod = DateTime.Now, 
+                BeginPeriod = DateTime.Now.Date, 
                 EndPeriod = DateTime.Now.AddDays(_bookingService._futureBookingPeriod)
             };
 
