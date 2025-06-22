@@ -1,9 +1,10 @@
 ﻿using KaraokeWebApp3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Globalization;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 
 namespace KaraokeWebApp3.Controllers
 {
@@ -12,10 +13,12 @@ namespace KaraokeWebApp3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly BookingService _bookingService;
+		private readonly IConverter _pdfConverter;
+
 		//private int _futureBookingPeriod;
 		//private int _maxDurationInHours;
 
-		public HomeController(ILogger<HomeController> logger, AppDbContext db)
+		public HomeController(ILogger<HomeController> logger, AppDbContext db, IConverter pdfConverter)
         {
             _logger = logger;
 
@@ -28,6 +31,7 @@ namespace KaraokeWebApp3.Controllers
 			var _maxDurationInHours = int.Parse(configuration.GetSection("Settings")?.GetSection("MaxDurationInHours")?.Value);
 			_bookingService._maxDurationInHours = _maxDurationInHours;
 			_bookingService._futureBookingPeriod = _futureBookingPeriod;
+			_pdfConverter = pdfConverter;
 
 		}
 
@@ -235,5 +239,67 @@ namespace KaraokeWebApp3.Controllers
         {
             return View();
         }
+
+		[HttpGet]
+		public IActionResult About()
+		{
+			return View();
+		}
+
+
+
+		[HttpGet]
+		public IActionResult Report()
+		{
+
+			var htmlContent = GenerateHtmlContent();
+
+
+			var doc = new HtmlToPdfDocument()
+			{
+				GlobalSettings = {
+				PaperSize = PaperKind.A4,
+				Orientation = Orientation.Portrait,
+				Margins = new MarginSettings(20, 15, 20, 15)
+			},
+				Objects = {
+				new ObjectSettings()
+				{
+					HtmlContent = htmlContent,
+					WebSettings = { DefaultEncoding = "utf-8" }
+				}
+			}
+			};
+
+			byte[] pdfBytes = _pdfConverter.Convert(doc);
+
+
+			return File(pdfBytes, "application/pdf", "DinkReport.pdf");
+
+		}
+
+		private string GenerateHtmlContent()
+		{
+			// Ваша реализация генерации HTML
+			return @"<html><body><h1>Работает с DinkToPdf!</h1></body></html>";
+		}
+
+
+		//private byte[] GeneratePdf()
+		//{
+		//	// Создаем PDF-документ
+		//	/*string htmlCode = "<html>wooo</html>";
+		//	PdfDocument pdf = PdfGenerator.GeneratePdf(htmlCode, PageSize.A4);
+		//	var ms = new MemoryStream();
+		//	pdf.Save(ms);
+
+		//	return ms.ToArray();*/
+
+
+		//	PdfDocument pdf = PdfGenerator.GeneratePdf("<p><h1>Hello World</h1>This is html rendered text</p>", PageSize.A4);
+		//	var ms = new MemoryStream();
+		//	pdf.Save(ms);
+		//	return ms.ToArray();
+		//}
 	}
 }

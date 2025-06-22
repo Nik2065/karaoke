@@ -6,8 +6,10 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+	using DinkToPdf;
+	using DinkToPdf.Contracts;
 
-    public class Startup
+	public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -35,9 +37,11 @@
             services.AddControllersWithViews();
             services.AddScoped<AuthService>();
 			services.AddScoped<BookingService>();
+			services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
 		}
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

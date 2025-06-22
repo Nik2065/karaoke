@@ -43,7 +43,7 @@ namespace LombardWebApp.Controllers
 					|| !request.DepositType.HasValue)
 				{
 					result.Success = false;
-					result.Message = "Не хватает данных для рассчета";
+					result.Message = "Не хватает данных для расчета";
 				}
 				else
 				{

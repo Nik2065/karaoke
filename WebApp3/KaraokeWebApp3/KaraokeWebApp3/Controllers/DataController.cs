@@ -68,11 +68,12 @@ namespace KaraokeWebApp3.Controllers
 				if (b < DateTime.Now)
 					throw new CheckException("Время начала брониварония не может быть в прошлом периоде");
 
-				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, int.Parse(request.Begintime), 0, 0);
+				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, 0, 0, 0);
+				b1 = b1.AddHours(int.Parse(request.Begintime));
 
 				var e = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, int.Parse(request.Endtime), 0, 0);
-
+				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, 0, 0, 0);
+				e1 = e1.AddHours(int.Parse(request.Endtime));
 
 				_bookingService.CheckBookParams(userId, b1, e1, int.Parse(request.SpaceId));
 				_bookingService.CreateBookByClient(userId, b1, e1, int.Parse(request.SpaceId));

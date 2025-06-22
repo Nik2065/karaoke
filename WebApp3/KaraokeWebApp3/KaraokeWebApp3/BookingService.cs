@@ -190,7 +190,10 @@ namespace KaraokeWebApp3
 			bool result = false;
 			//var boo
 			
-			
+			if(end<=begin)
+				throw new CheckException($"Конец периода бронирования должен быть позже чем начало");
+
+
 			//проверка длительности
 			var duration = (end - begin).Hours;
 			if (duration > _maxDurationInHours)
