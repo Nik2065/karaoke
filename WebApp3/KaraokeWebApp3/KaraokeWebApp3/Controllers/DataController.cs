@@ -5,18 +5,32 @@ using System.Globalization;
 
 namespace KaraokeWebApp3.Controllers
 {
+	/// <summary>
+	/// Контроллер для обработки запросов из js
+	/// </summary>
 	public class DataController : Controller
 	{
 		private readonly BookingService _bookingService;
+		private int _futureBookingPeriod;
+		private int _maxDurationInHours;
 
 
 		public DataController(BookingService bookingService)
 		{
+			var configuration = new ConfigurationBuilder()
+			.AddJsonFile("appsettings.json")
+			.Build();
+			
 			_bookingService = bookingService;
+			_futureBookingPeriod = int.Parse(configuration.GetSection("Settings")?.GetSection("FutureBookingPeriod")?.Value);
+			_maxDurationInHours = int.Parse(configuration.GetSection("Settings")?.GetSection("MaxDurationInHours")?.Value);
+			bookingService._maxDurationInHours = _maxDurationInHours;
+			bookingService._futureBookingPeriod = _futureBookingPeriod;
 		}
 
 
 		[HttpPost]
+		[Authorize]
 		public IActionResult DeleteBookItem(int id)
 		{
 			var result = new DeleteBookItemResponse();
@@ -34,7 +48,11 @@ namespace KaraokeWebApp3.Controllers
 			return Json(result);
 		}
 
-
+		/// <summary>
+		/// Получить список бронирований на ближайшие 2 недели для указанного зала
+		/// </summary>
+		/// <param name="spaceId"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public IActionResult GetBookForSpace(string spaceId)
 		{
@@ -43,8 +61,11 @@ namespace KaraokeWebApp3.Controllers
 			try
 			{
 				var o = new SearchOptions {
-					TimeType = TimeType.Future,
-					SpaceId = int.Parse(spaceId)
+					//TimeType = TimeType.Future,
+					SpaceId = int.Parse(spaceId),
+					BeginPeriod = DateTime.Now,
+					EndPeriod = DateTime.Now.AddDays(_futureBookingPeriod),
+
 				};
 
 				var list = _bookingService.GetBookings(o);
@@ -109,5 +130,11 @@ namespace KaraokeWebApp3.Controllers
 	public class DeleteBookItemResponse
 	{
 		public bool Success { get; set; }
+	}
+
+	public class AppSettings
+	{
+		public int FutureBookingPeriod {  get; set; }
+		public int MaxDurationInHours { get; set; }
 	}
 }

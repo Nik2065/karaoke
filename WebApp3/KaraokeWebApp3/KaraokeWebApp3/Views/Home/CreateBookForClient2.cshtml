@@ -62,12 +62,62 @@
 
 
 }
+<!--
+= загружаем бронирования на ближайшие 2 недели 
 
+-->
 
 
 <div class="card">
 	<div class="card-body">
 		<h4 class="card-title">Создать бронирование</h4>
+
+
+
+		<div class="row">
+			<div class="col-2"></div>
+
+			<div class="col-8">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<td>Дата</td>
+							<td>Зал</td>
+							<td>Начало брони</td>
+							<td>Конец брони</td>
+							<td>День недели</td>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach(var item in Model.BookItems)
+						{
+							<tr>
+								<td>@item.DtBegin.Day-@item.DtBegin.GetMonthInRus()</td>
+								<td>@item.SpaceName</td>
+								<td>@item.DtBegin.ToString("HH:mm")</td>
+								<td>@item.DtEnd.ToString("HH:mm")</td>
+								
+								@{
+									var st1 = "";
+									if (@item.DtEnd.ToString("dddd") == "воскресенье" || @item.DtEnd.ToString("dddd") == "суббота")
+									{
+										st1 = "bg-danger bg-opacity-25";
+									}
+
+								}
+								<td class="@st1">@item.DtEnd.ToString("dddd")</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+
+
+			</div>
+
+			<div class="col-2"></div>
+		</div>
+		<br/>
+
 
 
 		<form method="post" action='@Url.Action("CreateBookForClientResult", "Home")'>

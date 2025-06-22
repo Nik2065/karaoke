@@ -1,6 +1,7 @@
 ﻿using KaraokeWebApp3.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 
@@ -11,14 +12,26 @@ namespace KaraokeWebApp3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly BookingService _bookingService;
+		//private int _futureBookingPeriod;
+		//private int _maxDurationInHours;
 
-		public HomeController(ILogger<HomeController> logger, BookingService bookingService)
+		public HomeController(ILogger<HomeController> logger, AppDbContext db)
         {
             _logger = logger;
-            _bookingService = bookingService;
-        }
 
-        public IActionResult Index()
+			var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+			_bookingService = new BookingService(db);
+			var _futureBookingPeriod = int.Parse(configuration.GetSection("Settings")?.GetSection("FutureBookingPeriod")?.Value);
+			var _maxDurationInHours = int.Parse(configuration.GetSection("Settings")?.GetSection("MaxDurationInHours")?.Value);
+			_bookingService._maxDurationInHours = _maxDurationInHours;
+			_bookingService._futureBookingPeriod = _futureBookingPeriod;
+
+		}
+
+		public IActionResult Index()
         {
             return View();
         }
@@ -45,9 +58,13 @@ namespace KaraokeWebApp3.Controllers
 			var list = _bookingService.GetBookings(so);
 
             var model = new HomeForClientModel();
-            so.TimeType = TimeType.Future;
+            //so.TimeType = TimeType.Future;
+            so.BeginPeriod = DateTime.Now;
+            so.EndPeriod = DateTime.Now.AddDays(_bookingService._futureBookingPeriod);
             model.FutureBookings = _bookingService.GetBookings(so);
-			so.TimeType = TimeType.Past;
+			//so.TimeType = 
+			so.BeginPeriod = DateTime.Now.AddYears(-1);
+			so.EndPeriod = DateTime.Now;
 			model.PastBookings = _bookingService.GetBookings(so);
 
 
@@ -88,8 +105,14 @@ namespace KaraokeWebApp3.Controllers
         {
 			var model = new CreateBookForClientModel();
 			model.Spaces = _bookingService.GetSpaces();
+            var so = new SearchOptions { 
+                BeginPeriod = DateTime.Now, 
+                EndPeriod = DateTime.Now.AddDays(_bookingService._futureBookingPeriod)
+            };
 
-			return View(model);
+			model.BookItems = _bookingService.GetBookings(so);
+
+			return View("CreateBookForClient2", model);
         }
 
 		[Authorize]

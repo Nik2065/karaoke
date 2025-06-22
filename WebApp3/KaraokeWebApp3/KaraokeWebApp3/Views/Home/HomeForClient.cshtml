@@ -15,27 +15,25 @@
 			</div>
 
 			<div style="text-align:right">
-				<a href='@Url.Action("CreateBookForClient", "Home")' class="btn btn-primary">+ Создать бронирование</a>
+			<a href='@Url.Action("CreateBookForClient", "Home")' class="btn btn-primary"><i class="bi bi-plus-square"></i> Создать бронирование</a>
 			</div>
 
 			<br />
 			<br />
 			<br />
 			<div class="row">
-				<div style="text-align:right">
+				<!--div style="text-align:right">
 					<button type="submit" class="btn btn-primary">Обновить таблицу</button>
-				</div>
+				</div-->
 
 				<br />
 				<br />
 				<!--Таблица результатов-->
-			<h4 class="alert alert-primary">Текущие брони</h4>
+				<h4 class="alert alert-primary">Текущие брони</h4>
 				<table class="table table-bordered">
 					<thead>
 						<tr>
 							<td>id</td>
-							<td>Месяц</td>
-							<td>Дата</td>
 							<td>Зал</td>
 							<td>Время начала</td>
 							<td>Время окончания</td>
@@ -47,8 +45,6 @@
 							{
 								<tr>
 									<td>@item.Id</td>
-									<td>@item.DtBegin.GetMonthInRus()</td>
-									<td>@item.DtBegin.Day</td>
 									<td>@item.SpaceName</td>
 									<td>@item.DtBegin.ToString("yyyy-MM-dd_HH:mm")</td>
 									<td>@item.DtEnd.ToString("yyyy-MM-dd_HH:mm")</td>
@@ -65,9 +61,9 @@
 		<br />
 		<br />
 		<div class="row">
-			<div style="text-align:right">
+			<!-- div style="text-align:right">
 				<button type="submit" class="btn btn-primary">Обновить таблицу</button>
-			</div>
+			</div-->
 
 			<br />
 			<br />
@@ -77,8 +73,6 @@
 				<thead>
 					<tr>
 						<td>id</td>
-						<td>Месяц</td>
-						<td>Дата</td>
 						<td>Зал</td>
 						<td>Время начала</td>
 						<td>Время окончания</td>
@@ -90,8 +84,6 @@
 						{
 							<tr>
 								<td>@item.Id</td>
-								<td>@item.DtBegin.Month</td>
-								<td>@item.DtBegin.Day</td>
 								<td>@item.SpaceName</td>
 								<td>@item.DtBegin.ToString("yyyy-MM-dd_HH:mm")</td>
 								<td>@item.DtEnd.ToString("yyyy-MM-dd_HH:mm")</td>

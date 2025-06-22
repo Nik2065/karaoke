@@ -4,12 +4,23 @@ namespace KaraokeWebApp3
 {
 	public class BookingService
 	{
-		public BookingService(AppDbContext db) 
+		public BookingService(AppDbContext db)
 		{
 			_db = db;
+			//_futureBookingPeriod = futureBookingPeriod;
+			//_maxDurationInHours = maxDurationInHours;
+		}
+
+		public BookingService(AppDbContext db, int futureBookingPeriod, int maxDurationInHours)
+		{
+			_db = db;
+			_futureBookingPeriod = futureBookingPeriod;
+			_maxDurationInHours = maxDurationInHours;
 		}
 
 		private readonly AppDbContext _db;
+		public int _futureBookingPeriod;
+		public int _maxDurationInHours;
 
 		/// <summary>
 		/// получаем список всех бронирований по фильтру
@@ -18,7 +29,11 @@ namespace KaraokeWebApp3
 		/// <returns></returns>
 		public List<BookItemDto> GetBookings(SearchOptions options)
 		{
-			var list = from b in _db.Bookings
+			//ограничиваем период поиска до X дней вперед
+			var future = DateTime.Now.AddDays(_futureBookingPeriod);
+
+
+			var list = from b in _db.Bookings.Where(x => x.DtBegin <= future)
 					   join s in _db.Spaces on b.SpaceId equals s.Id
 					   select new BookItemDto
 					   {
@@ -40,13 +55,13 @@ namespace KaraokeWebApp3
 				list = list.Where(x => x.ClientId == options.UserId);
 			}
 
-			if (options.TimeType == TimeType.Future)
+			if (options.BeginPeriod != null)
 			{
-				list = list.Where(x => x.DtBegin >= dtNow);
+				list = list.Where(x => x.DtBegin >= options.BeginPeriod);
 			}
-			else if (options.TimeType == TimeType.Past)
+			else if (options.EndPeriod != null)
 			{
-				list = list.Where(x => x.DtBegin < dtNow);
+				list = list.Where(x => x.DtBegin < options.EndPeriod);
 			}
 
 			//по залу
@@ -58,16 +73,12 @@ namespace KaraokeWebApp3
 			//var resultList = new List<BookItemDto>();
 			//var spaces = _db.Spaces.ToList();
 
-			/*foreach (var item in list) 
-			{ 
-			
-			}*/
 
-			return list.ToList();
+			return list.OrderBy(x=>x.DtBegin).ToList();
 		}
 
 		//максимальный период бронирования
-		private decimal MaxDurationInHours = 5;
+		//private decimal MaxDurationInHours = 5;
 
 		public void CheckBookParams(DateTime begin, DateTime end, int spaceId)
 		{
@@ -77,8 +88,8 @@ namespace KaraokeWebApp3
 			
 			//проверка длительности
 			var duration = (end - begin).Hours;
-			if (duration > MaxDurationInHours)
-				throw new CheckException($"Выбрана слишком большая (более {MaxDurationInHours} часов) длительность бронирования. Уменьшите период");
+			if (duration > _maxDurationInHours)
+				throw new CheckException($"Выбрана слишком большая (более {_maxDurationInHours} часов) длительность бронирования. Уменьшите период");
 
 			
 
@@ -189,12 +200,14 @@ namespace KaraokeWebApp3
 			UserId = null;
 		}
 
-		public int Year { get; set; }
-		public int Month { get; set; }
+		//public int Year { get; set; }
+		//public int Month { get; set; }
+		public DateTime? BeginPeriod { get; set; }
+		public DateTime? EndPeriod { get; set; }
 
 		public int? UserId { get; set; }
 
-		public TimeType TimeType { get; set; }
+		//public TimeType TimeType { get; set; }
 
 		//id зала
 		public int? SpaceId { get; set; }
@@ -202,12 +215,12 @@ namespace KaraokeWebApp3
 
 	}
 
-	public enum TimeType
+	/*public enum TimeType
 	{
 		All = 0,
 		Future = 1,
 		Past = 2
-	}
+	}*/
 
 	public class CheckCheckBookParamsResult
 	{
