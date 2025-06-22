@@ -64,6 +64,10 @@ namespace KaraokeWebApp3.Controllers
 				var userId = int.Parse(userIdStr);
 
 				var b = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+				if (b < DateTime.Now)
+					throw new CheckException("Время начала брониварония не может быть в прошлом периоде");
+
 				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, int.Parse(request.Begintime), 0, 0);
 
 				var e = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
@@ -167,7 +171,7 @@ namespace KaraokeWebApp3.Controllers
 		}
 
 
-		[HttpGet]
+		/*[HttpGet]
 		[Authorize]
 		public IActionResult CheckBookParams(string spaceId, string begin, string end)
 		{
@@ -192,7 +196,7 @@ namespace KaraokeWebApp3.Controllers
 
 
 			return Json(result);
-		}
+		}*/
 
 	}
 

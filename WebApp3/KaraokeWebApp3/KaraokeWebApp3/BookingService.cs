@@ -59,7 +59,8 @@ namespace KaraokeWebApp3
 			{
 				list = list.Where(x => x.DtBegin >= options.BeginPeriod);
 			}
-			else if (options.EndPeriod != null)
+			
+			if (options.EndPeriod != null)
 			{
 				list = list.Where(x => x.DtBegin < options.EndPeriod);
 			}
@@ -195,8 +196,11 @@ namespace KaraokeWebApp3
 			if (duration > _maxDurationInHours)
 				throw new CheckException($"Выбрана слишком большая (более {_maxDurationInHours} часов) длительность бронирования. Уменьшите период");
 
-			
-			if(AlreadyTaken(begin, end, spaceId))
+			if (duration == 0)
+				throw new CheckException($"Длительность бронирования не может быть нулевой. Увеличьте период");
+
+
+			if (AlreadyTaken(begin, end, spaceId))
 					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры");
 
 			return result;

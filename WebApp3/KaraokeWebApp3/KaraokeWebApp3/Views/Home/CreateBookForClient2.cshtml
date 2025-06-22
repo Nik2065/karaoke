@@ -120,7 +120,11 @@
 		}
 
 		function showSuccess(text){
-			Eid("result").innerHTML = "<div class='alert alert-success text-center'> " + text + "</div>";
+			Eid("result").innerHTML = "<div>" 
+			+ "<div class='alert alert-success text-center'> " + text + "</div>"
+		   + "<a class='btn btn-outline-primary' href='/home/HomeForClient/'>Перейти к списку бронирований</a>"
+		   + "</div>";
+
 		}
 
 		//
