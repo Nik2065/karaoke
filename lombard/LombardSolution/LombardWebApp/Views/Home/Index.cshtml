@@ -115,7 +115,9 @@
 			const t = document.getElementById("deposit_type").value;
 			const sum = document.getElementById("sum").value;
 			let resultEl = document.getElementById("result");
-
+			let msgEl = document.getElementById("msg");
+			msgEl.innerHTML = "";
+			resultEl.innerHTML = "";
 
 			const url = "/data/CalcDeposit"
 			fetch(url, {
@@ -138,7 +140,9 @@
 					}
 					else {
 						//todo
-						resultEl.innerHTML = '<strong>Ошибка при расчете</strong>'
+						//resultEl.innerHTML = '<strong>Ошибка при расчете</strong>'
+						
+						msgEl.innerHTML = '<strong>'+result.message+'</strong>';
 					}
 			})
 			.catch(error =>{
@@ -169,13 +173,18 @@
 			  }
 			});
 
+			document.getElementById('sum').addEventListener('input', function() {
+			  const regex =  /[^0-9]/g; // Инвертированный шаблон
+			  if (regex.test(this.value)) {
+				this.value = this.value.replace(regex, ''); // Удалить запрещённые символы
+			  }
+
+			});
+
 		});
 
 
-		function onsumchange(){
-			//const v = document.getElementById('sum').value
-			//if
-		}
+
 	</script>
 	}
 
@@ -351,7 +360,7 @@
 								<span class="input-group-text col-4">
 									Сумма займа
 								</span>
-							<input id="sum" min="0" type="number" onchange="onsumchange()" class="form-control col-8" placeholder="Введите сумму">
+							<input id="sum" min="0" type="text" onchange="" class="form-control col-8" placeholder="Введите сумму">
 							</div>
 						</div>
 						<button onclick="calcDeposit()" class="btn btn-warning w-100">
@@ -367,6 +376,9 @@
 								</div>
 								<div id="result" class="col-4 " style="text-align:right">
 								</div>
+							</div>
+							<div id="msg">
+
 							</div>
 						</div>
 

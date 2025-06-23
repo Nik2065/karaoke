@@ -39,17 +39,31 @@ namespace LombardWebApp.Controllers
 			var result = new CalcDepositResponse { Success = true };
 			try
 			{
-				if (request.Sum == null
-					|| !request.DepositType.HasValue)
-				{
-					result.Success = false;
-					result.Message = "Не хватает данных для расчета";
-				}
-				else
-				{
+
+
+				if (request == null)
+					throw new Exception("Не указаны данные для расчета");
+
+				if (request.DepositType == 0)
+					throw new Exception("Не выбран тип залога");
+
+				//if (request.Sum == null
+				//	|| !request.DepositType.HasValue)
+				//{
+				//	result.Success = false;
+				//	result.Message = "Не хватает данных для расчета";
+				//}
+				//else
+				//{
+
+
+
+					if(request.Sum == null || request.Sum == 0)
+						throw new Exception("Не указана сумма залога");
+
 					var r = _marketingService.CalcDeposit(type: (DepositTypeEnum)request.DepositType, sum: (decimal)request.Sum);
 					result.SumInMonth = r;
-				}
+				//}
 			}
 			catch (Exception ex)
 			{
