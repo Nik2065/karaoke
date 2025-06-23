@@ -246,6 +246,11 @@ namespace KaraokeWebApp3.Controllers
 			return View();
 		}
 
+		[HttpGet]
+		public IActionResult Rules()
+		{
+			return View();
+		}
 
 
 		[HttpGet]
