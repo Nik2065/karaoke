@@ -94,6 +94,21 @@ namespace KaraokeWebApp3.Controllers
 			return Json(result);
 		}
 
+
+		[HttpPost]
+		[Authorize]
+		public IActionResult CreateBookItemByManager([FromBody] CreateBookItemByManagerRequest request)
+		{
+			var result = new CreateBookItemByManagerResponse();
+
+
+
+
+			return Json(result);
+		}
+
+
+
 		/// <summary>
 		/// Получить список бронирований на ближайшие 2 недели для указанного зала
 		/// </summary>
@@ -256,4 +271,30 @@ namespace KaraokeWebApp3.Controllers
 		[JsonPropertyName("SpaceId")]
 		public string SpaceId { get; set; } = "";
 	}
+
+
+	public class CreateBookItemByManagerRequest
+	{
+		[JsonPropertyName("Date")]
+		public string Date { get; set; } = "";
+
+		[JsonPropertyName("Begintime")]
+		public int Begintime { get; set; }
+
+		[JsonPropertyName("Endtime")]
+		public int Endtime { get; set; }
+
+		[JsonPropertyName("SpaceId")]
+		public int SpaceId { get; set; }
+
+		[JsonPropertyName("ClientId")]
+		public int ClientId { get; set; }
+	}
+
+	public class CreateBookItemByManagerResponse
+	{
+		public bool Success { get; set; }
+		public string Message { get; set; }
+	}
+
 }

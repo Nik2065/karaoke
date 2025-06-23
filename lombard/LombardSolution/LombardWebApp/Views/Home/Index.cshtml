@@ -171,6 +171,11 @@
 
 		});
 
+
+		function onsumchange(){
+			//const v = document.getElementById('sum').value
+			//if
+		}
 	</script>
 	}
 
@@ -346,7 +351,7 @@
 								<span class="input-group-text col-4">
 									Сумма займа
 								</span>
-								<input id="sum" type="number" class="form-control col-8" placeholder="Введите сумму">
+							<input id="sum" min="0" type="number" onchange="onsumchange()" class="form-control col-8" placeholder="Введите сумму">
 							</div>
 						</div>
 						<button onclick="calcDeposit()" class="btn btn-warning w-100">

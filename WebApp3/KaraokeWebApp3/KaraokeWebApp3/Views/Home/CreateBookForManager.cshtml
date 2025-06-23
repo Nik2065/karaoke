@@ -4,13 +4,279 @@
 @model CreateBookForManagerModel
 
 
+@section Head {
+	<script>
+
+		const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+		const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+
+		function GetBookTable(){
+
+			let tblElement = document.getElementById("bookTable").getElementsByTagName('tbody')[0];
+			let zalId = document.getElementById("zal").value;
+			let selectedDate = document.getElementById("selectedDate").value;
+			//очищаем список
+			tblElement.innerHTML = "";
+
+			if(zalId == -1)
+			{
+				return;
+			}
+
+			const url = "/data/GetBookings?spaceId=" + zalId + "&date=" + selectedDate;
+
+
+			fetch(url)
+			.then(response => response.json())
+			.then(result => {
+				console.log(result);
+
+				if(result.success) {
+					//const h = TblInHtml(result.bookItems);
+					const h = notBookTableInHtml(result.notBookItems);
+					console.log(h);
+					tblElement.innerHTML = h;
+
+				}
+
+
+			})
+			.catch(error => console.log(error));
+
+		}
+
+		function notBookTableInHtml(data){
+			let result = '';
+
+
+			data.forEach(item => {
+				let b1 = new Date(item['dtBegin']);
+				let b11 = b1.getDate() + "-" + months[b1.getMonth()];
+				let b12 = addZero(b1.getHours()) + ":" + addZero(b1.getMinutes());
+				//console.log(b1);
+				let e1 = new Date(item['dtEnd']);
+				let e12 = addZero(e1.getHours()) + ":" + addZero(e1.getMinutes());
+
+				let dn = days[ b1.getDay() ];
+
+
+				result += "<tr>";
+				result += "<td>" + b11 + "</td>";
+				result += "<td>" + item['spaceName'] + "</td>";
+				result += "<td>" + b12 + "</td>";
+				result += "<td>" + e12 + "</td>";
+				result += "<td>" + dn + "</td>";
+				result += "</tr>"
+			});
+
+
+			return result;
+		}
+
+
+		function create(){
+			let zalId = Eid("zal").value;
+			let selectedDate = Eid("selectedDate").value;
+			let begintime = Eid("begintime").value;
+			let endtime = Eid("endtime").value;
+			let clientId = Eid("clientId").value;
+
+			if(clientId == -1) {
+				showError("Не выбран клиент");
+				return;
+			}
+
+			if(zalId == -1) {
+				showError("Не выбран зал бронирования");
+				return;
+			}
+
+			if(selectedDate == "") {
+				showError("Не выбрана дата бронирования");
+				return;
+			}
+
+			const url = "/data/CreateBookItem";
+
+		}
+
+		
+		
+		function showError(text){
+			Eid("result").innerHTML = "<div class='alert alert-danger text-center'> " + text + "</div>";
+		}
+
+		function showSuccess(text){
+			Eid("result").innerHTML = "<div>"
+			+ "<div class='alert alert-success text-center'> " + text + "</div>"
+		   + "<a class='btn btn-outline-primary' href='/home/HomeForClient/'>Перейти к списку бронирований</a>"
+		   + "</div>";
+
+		}
+
+		
+		function Eid(id){
+			return document.getElementById(id)
+		}
+
+		function addZero(val){
+			if(val.toString().length == 1)
+			return "0" + val;
+			else
+				return val;
+		}
+
+	</script>
+}
+
 <div class="card">
 	<div class="card-body">
 		<h4 class="card-title">Создать бронирование</h4>
 
 
 
-		<form method="post" action='@Url.Action("CreateBookForManagerResult", "Home")'>
+
+		<div class="row">
+			<div class="col-3"></div>
+
+			<div class="col-6">
+				<div class="mb-3">
+					<label for="Input" class="form-label">Клиент</label>
+					<select id="clientId" name="clientId" class="form-select" onchange="GetBookTable()">
+						@{
+							<option value="-1" selected>Выберите клиента из списка</option>
+							foreach (var u in Model.Clients)
+							{
+								<option value='@u.Id'>@u.Phone | @u.Username</option>
+							}
+						}
+
+					</select>
+				</div>
+				<div class="mb-3">
+					<label for="Input2" class="form-label">Зал</label>
+					<select id="zal" name="zalId" class="form-select" onchange="GetBookTable()">
+						@{
+
+							<option value="-1" selected>Выберите зал из списка</option>
+							foreach (var s in Model.Spaces)
+							{
+								<option value='@s.Id'>@s.SpaceName</option>
+							}
+						}
+
+					</select>
+			
+			  </div>
+
+				<div class="mb-3 row">
+					<div class="col-6">
+						<label for="formGroupExampleInput" class="form-label">Дата бронирования</label>
+						<input id="selectedDate" name="begin" type="date" class="form-control" onchange="GetBookTable()" placeholder="">
+					</div>
+				</div>
+
+				<div class="">
+					<label for="Input3" class="form-label">Время </label>
+				</div>
+
+				<div class="mb-3 row">
+					<div class="col-6">
+						<select id="begintime" name="endtime" class="form-select">
+
+							<option value="10">10:00</option>
+							<option value="11">11:00</option>
+							<option value="12">12:00</option>
+							<option value="13">13:00</option>
+							<option value="14">14:00</option>
+
+
+							<option value="15">15:00</option>
+							<option value="16">16:00</option>
+							<option value="17">17:00</option>
+							<option value="18">18:00</option>
+							<option value="19">19:00</option>
+							<option value="20">20:00</option>
+							<option value="21">21:00</option>
+							<option value="22">22:00</option>
+							<option value="23">23:00</option>
+						</select>
+					</div>
+					<div class="col-6">
+						<select id="endtime" name="endtime" class="form-select">
+							<option value="11">11:00</option>
+							<option value="12">12:00</option>
+							<option value="13">13:00</option>
+							<option value="14">14:00</option>
+							<option value="15">15:00</option>
+							<option value="16">16:00</option>
+							<option value="17">17:00</option>
+							<option value="18">18:00</option>
+							<option value="19">19:00</option>
+							<option value="20">20:00</option>
+							<option value="21">21:00</option>
+							<option value="22">22:00</option>
+							<option value="23">23:00</option>
+							<option value="0">00:00</option>
+						</select>
+					</div>
+				</div>
+
+
+				<div style="text-align:right">
+					<button type="button" id="createbutton" onclick="create()" class="btn btn-primary">Создать</button>
+
+				</div>
+				<br />
+
+				<div class="mb-3" id="result">
+				</div>
+
+
+			  </div>
+			<div class="col-3"></div>
+			</div>
+
+
+
+			<br/>
+
+			<div>
+				<h6>Выберите зал, тут будут отображаться ближайшие свободное время для этого зала</h6>
+				<table id="bookTable" class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<td>Дата</td>
+							<td>Зал</td>
+							<td>Начало свободного времени</td>
+							<td>Конец свободного времени</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+			<br />
+
+			<div class="row">
+				<div class="col-sm-12">
+					<h6>Правила бронирования</h6>
+					+ Забронировать можно зал можно только в период работы караоке: c 10.00 до 0.00
+					<br />
+					+ Максимальный период бронирования - 5 часов
+					<br />
+					+ Нельзя забронировать время которое пересекается с чужой бронью
+					<br />
+					+ Нельзя забронировать зал более чем за 2 недели до мероприятия
+				</div>
+
+			</div>
+
+
+
+@* 		<form method="post" action='@Url.Action("CreateBookForManagerResult", "Home")'>
 
 
 
@@ -21,7 +287,6 @@
 
 				<div class="mb-3">
 					<label for="Input" class="form-label">Клиент</label>
-					@*<input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">*@
 					<select name="clientId""" class="form-select" >
 						@{
 							<option value="-1" selected>Выберите клиента из списка</option>
@@ -103,7 +368,7 @@
 			</div>
 
 
-		</form>
+		</form> *@
 
 	</div>
 </div>
