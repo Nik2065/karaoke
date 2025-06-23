@@ -81,12 +81,19 @@ namespace KaraokeWebApp3.Controllers
         public IActionResult HomeForManager()
         {
             //получаем записи из базы
-            var so = new SearchOptions();
-            var list = _bookingService.GetBookings(so);
+           
 
             var model = new HomeForManagerModel();
-            model.Bookings = list;
-            model.Users = _bookingService.GetUsers();
+			var so = new SearchOptions();
+			so.BeginPeriod = DateTime.Now.Date;
+			so.EndPeriod = DateTime.Now.AddDays(14);
+			model.FutureBookings = _bookingService.GetBookings(so);
+
+			so.BeginPeriod = DateTime.Now.AddYears(-1);
+			so.EndPeriod = DateTime.Now.Date;
+			model.PastBookings = _bookingService.GetBookings(so);
+
+			model.Users = _bookingService.GetUsers();
 
 			return View(model);
         }
@@ -103,7 +110,19 @@ namespace KaraokeWebApp3.Controllers
         }
 
 
-        [Authorize]
+		[Authorize]
+		[HttpGet]
+		public IActionResult EditBookForManager(int editId)
+		{
+			var model = new EditBookForManagerModel();
+			model.Clients = _bookingService.GetClients();
+			model.Spaces = _bookingService.GetSpaces();
+			model.Booking = _bookingService.GetBooking(editId);
+			return View(model);
+		}
+
+
+		[Authorize]
         [HttpGet]
         public IActionResult CreateBookForClient()
         {

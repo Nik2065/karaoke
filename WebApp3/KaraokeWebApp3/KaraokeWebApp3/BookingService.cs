@@ -112,7 +112,25 @@ namespace KaraokeWebApp3
 			return notBookings;
 		}
 
+		/// <summary>
+		/// возвращаем сущность бронирования из базы по id
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public Booking? GetBooking(int id)
+		{
+			return _db.Bookings.FirstOrDefault(x => x.Id == id);
+		}
 
+		public void SaveBooking(Booking booking)
+		{
+			var one =  _db.Bookings.FirstOrDefault(x => x.Id == booking.Id);
+			if (one != null)
+			{
+				one = booking;
+				_db.SaveChanges();
+			}
+		}
 
 		//Проверка:Пересекается с уже забрнированным временем
 		//periodBegin, periodEnd - проверяемый период
@@ -156,11 +174,16 @@ namespace KaraokeWebApp3
 			return result;
 		}
 
-
-		public bool AlreadyTaken(DateTime periodBegin, DateTime periodEnd, int spaceId)
+		//период уже забронирован
+		public bool AlreadyTaken(DateTime periodBegin, DateTime periodEnd, int spaceId, int? bookToExclude = null)
 		{
 			var result = false;
-			var bookings = _db.Bookings.Where(x => x.SpaceId == spaceId);
+			var d = DateTime.Now.Date;
+
+			var bookings = _db.Bookings.Where(x => x.SpaceId == spaceId && x.DtBegin>d).ToList();
+
+			if (bookToExclude != null)
+				bookings = bookings.Where(x => x.Id != bookToExclude).ToList();
 
 			foreach (var item in bookings)
 			{
@@ -185,7 +208,8 @@ namespace KaraokeWebApp3
 		//максимальный период бронирования
 		//private decimal MaxDurationInHours = 5;
 		//todo
-		public bool CheckBookParams(int userId, DateTime begin, DateTime end, int spaceId)
+		//bookToExclude - если редактируем бронирование то исключаем его из проверки
+		public bool CheckBookParams(int userId, DateTime begin, DateTime end, int spaceId, int? bookToExclude = null)
 		{
 			bool result = false;
 			//var boo
@@ -203,7 +227,7 @@ namespace KaraokeWebApp3
 				throw new CheckException($"Длительность бронирования не может быть нулевой. Увеличьте период");
 
 
-			if (AlreadyTaken(begin, end, spaceId))
+			if (AlreadyTaken(begin, end, spaceId, bookToExclude))
 					throw new CheckException("На это время уже существует бронирование. Выберите другие пераметры");
 
 			return result;
@@ -271,18 +295,18 @@ namespace KaraokeWebApp3
 		/// <param name="managerId"></param>
 		/// <param name="begin"></param>
 		/// <param name="end"></param>
-		/// <param name="zalId"></param>
-		public void CreateBookByManager(int clientId, int managerId, DateTime begin, DateTime end, int zalId)
+		/// <param name="spaceId"></param>
+		public void CreateBookByManager(int clientId, int managerId, DateTime begin, DateTime end, int spaceId)
 		{
-			var zal = _db.Spaces.FirstOrDefault(x => x.Id == zalId);
+			var zal = _db.Spaces.FirstOrDefault(x => x.Id == spaceId);
 
 			var one = new Booking();
 			one.ClientId = clientId;
 			one.AuthorId = managerId;
-			one.DtBegin = begin; one.DtEnd = end;
+			one.DtBegin = begin; 
+			one.DtEnd = end;
 			one.Created = DateTime.Now;
-			//one.SpaceName = zal?.SpaceName ?? "-";
-			one.SpaceId = zalId;
+			one.SpaceId = spaceId;
 
 			_db.Bookings.Add(one);
 			_db.SaveChanges();

@@ -36,85 +36,45 @@
         <h4 class="card-title">Личный кабинет менеджера</h4>
 
 
-		<form>
+		
 			<div class="row" style="text-align:right">
 				<a href=""></a>
 			</div>
 			
 			<div style="text-align:right">
-				<a href='@Url.Action("CreateBookForManager", "Home")' class="btn btn-primary">Создать бронирование</a>
-				<a href='@Url.Action("Report", "Home")' class="btn btn-outline-primary">Скачать отчет</a>
+				<a href='@Url.Action("CreateBookForManager", "Home")' class="btn btn-primary"><i class="bi bi-plus-square"></i> Создать бронирование</a>
+				@* <a href='@Url.Action("Report", "Home")' class="btn btn-outline-primary">Скачать отчет</a> *@
 			</div>
 
+		<br />
+		<br />
+		<br />
 		<div class="row">
-				<br />
-				<!--TODO: фильтр для поиска-->
-				@*	<table class="table table-bordered">
-					<thead>
-						<tr>
-							<td>
-								<select class="form-control">
-									<option>май</option>
-									@{
-
-									}
-								</select>
-							</td>
-							<td>
-								<select class="form-control">
-									@{
-										for (int i = 1; i <= 31; i++)
-										{
-											<option value="@i">@i</option>
-										}
-									}
-
-								</select>
-							</td>
-
-							<td>
-								<select class="form-control">
-									<option>Зал 3</option>
-									<option>Зал 4</option>
-								</select>
-							</td>
-
-						</tr>
-					</thead>
-				</table>
-				<div style="text-align:right">
-					<button type="submit" class="btn btn-primary">Показать</button>
-				</div>*@
-
-				<br />
-				<br />
+				
+	
 				<!--Таблица результатов-->
-				<h4>Текущие брони</h4>
+			<h4 class="alert alert-primary">Текущие брони</h4>
 				<table class="table table-bordered">
 					<thead>
 						<tr>
-							<td>id</td>
-							<td>Месяц</td>
-							<td>Дата</td>
-							<td>Номер телефона</td>
-							<td>Имя клиента</td>
-							<td>Зал</td>
-							<td>Время начала</td>
-							<td>Время окончания</td>
+							<th width="5%">id</th>
+							<th width="15%">Номер телефона</th>
+							<th width="25%">Имя клиента</th>
+							<th width="10%">Зал</th>
+							<th width="15%">Время начала</th>
+							<th width="15%">Время окончания</th>
 							<td></td>
 						</tr>
 					</thead>
 					<tbody>
 						@{
-							foreach (var item in Model.Bookings)
+							foreach (var item in Model.FutureBookings)
 							{
 
 								var currentClient = Model.Users.FirstOrDefault(u => u.Id == item.ClientId);
 
 								<tr>
 									<td>@item.Id</td>
-									<td>@item.DtBegin.GetMonthInRus()</td>
-									<td>@item.DtBegin.Day</td>
 									<td>
 										@currentClient?.Phone
 									</td>
@@ -128,6 +88,10 @@
 										<button title="Удалить запись" class="btn btn-outline-secondary" type="button" onclick="deleteItem(@item.Id)">
 											<i style="color:slategray"  class="bi bi-trash"></i>
 										</button>
+
+										<a title="Редактировать запись" class="btn btn-outline-secondary" href='@Url.Action("EditBookForManager","Home", new {editId=item.Id})'>
+											<i style="color:slategray" class="bi bi-pencil"></i>
+										</a>
 									</td>
 								</tr>
 							}
@@ -137,7 +101,53 @@
 
 
 			</div>
-		</form>
+		<br />
+		<br />
+		<br />
+		<div class="row">
+
+			<!--Таблица результатов-->
+			<h4 class="alert alert-secondary">Прошедшие брони</h4>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th width="5%">id</th>
+						<th width="15%">Номер телефона</th>
+						<th width="25%">Имя клиента</th>
+						<th width="10%">Зал</th>
+						<th width="15%">Время начала</th>
+						<th width="15%">Время окончания</th>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						foreach (var item in Model.PastBookings)
+						{
+
+							var currentClient = Model.Users.FirstOrDefault(u => u.Id == item.ClientId);
+
+							<tr>
+								<td>@item.Id</td>
+								<td>
+									@currentClient?.Phone
+								</td>
+								<td>
+									@currentClient?.Username
+								</td>
+								<td>@item.SpaceName</td>
+								<td>@item.DtBegin.ToString("yyyy-MM-dd_HH:mm")</td>
+								<td>@item.DtEnd.ToString("yyyy-MM-dd_HH:mm")</td>
+								<td>
+
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+		
 	</div>
 </div>
 

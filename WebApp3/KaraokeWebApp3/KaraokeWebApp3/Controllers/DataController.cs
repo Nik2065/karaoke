@@ -99,9 +99,98 @@ namespace KaraokeWebApp3.Controllers
 		[Authorize]
 		public IActionResult CreateBookItemByManager([FromBody] CreateBookItemByManagerRequest request)
 		{
-			var result = new CreateBookItemByManagerResponse();
+			var result = new CreateBookItemByManagerResponse { Success = true, Message = "Бронирование создано" };
+
+			try
+			{
+				//определяем менеджера
+				var claims = User.Claims;
+				var userIdStr = claims?.FirstOrDefault(x => x.Type.Contains("nameidentifier"))?.Value;
+				var userId = int.Parse(userIdStr);
+
+				var b = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+				if (b < DateTime.Now)
+					throw new CheckException("Время начала брониварония не может быть в прошлом периоде");
+
+				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, 0, 0, 0);
+				b1 = b1.AddHours(request.Begintime);
+
+				var e = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, 0, 0, 0);
+				e1 = e1.AddHours(request.Endtime);
+
+				_bookingService.CheckBookParams(userId, b1, e1, request.SpaceId);
+				_bookingService.CreateBookByManager(request.ClientId, userId, b1, e1, request.SpaceId);
+			}
+			catch (CheckException ex)
+			{
+				result.Success = false;
+				result.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
+			catch (Exception ex)
+			{
+				result.Success = false;
+				result.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
 
 
+			return Json(result);
+		}
+
+		[HttpPost]
+		[Authorize]
+		public IActionResult EditBookItemByManager([FromBody] EditBookItemByManagerRequest request)
+		{
+			var result = new EditBookItemByManagerResponse { Success = true, Message = "Бронирование отредактировано" };
+
+			try
+			{
+				var currentBooking = _bookingService.GetBooking(request.Id);
+
+				if (currentBooking == null)
+					throw new Exception("Бронирование не найдено");
+
+
+				//определяем менеджера
+				var claims = User.Claims;
+				var userIdStr = claims?.FirstOrDefault(x => x.Type.Contains("nameidentifier"))?.Value;
+				var userId = int.Parse(userIdStr);
+
+				var b = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+				if (b < DateTime.Now)
+					throw new CheckException("Время начала брониварония не может быть в прошлом периоде");
+
+
+				DateTime b1 = new DateTime(b.Year, b.Month, b.Day, 0, 0, 0);
+				b1 = b1.AddHours(request.Begintime);
+
+				var e = DateTime.ParseExact(request.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+				DateTime e1 = new DateTime(e.Year, e.Month, e.Day, 0, 0, 0);
+				e1 = e1.AddHours(request.Endtime);
+
+
+				currentBooking.DtBegin = b1;
+				currentBooking.DtEnd = e1;
+				currentBooking.AuthorId = userId;
+				currentBooking.SpaceId = request.SpaceId;
+
+
+				_bookingService.CheckBookParams(userId, b1, e1, request.SpaceId, currentBooking.Id);
+				_bookingService.SaveBooking(currentBooking);
+
+			}
+			catch (CheckException ex)
+			{
+				result.Success = false;
+				result.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
+			catch (Exception ex)
+			{
+				result.Success = false;
+				result.Message = "Ошибка при создании бронирования:" + ex.Message;
+			}
 
 
 			return Json(result);
@@ -275,6 +364,34 @@ namespace KaraokeWebApp3.Controllers
 
 	public class CreateBookItemByManagerRequest
 	{
+		[JsonPropertyName("Date")]
+		public string Date { get; set; } = "";
+
+		[JsonPropertyName("Begintime")]
+		public int Begintime { get; set; }
+
+		[JsonPropertyName("Endtime")]
+		public int Endtime { get; set; }
+
+		[JsonPropertyName("SpaceId")]
+		public int SpaceId { get; set; }
+
+		[JsonPropertyName("ClientId")]
+		public int ClientId { get; set; }
+	}
+
+	public class EditBookItemByManagerResponse
+	{
+		public bool Success { get; set; }
+		public string Message { get; set; }
+	}
+
+
+	public class EditBookItemByManagerRequest
+	{
+		[JsonPropertyName("Id")]
+		public int Id { get; set; }//идентификатор редактируемого бронирования
+
 		[JsonPropertyName("Date")]
 		public string Date { get; set; } = "";
 

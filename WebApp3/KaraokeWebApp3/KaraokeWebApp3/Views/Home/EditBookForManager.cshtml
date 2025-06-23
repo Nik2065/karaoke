@@ -1,7 +1,7 @@
 ﻿@{
 	Layout = "_Layout2";
 }
-@model CreateBookForManagerModel
+@model EditBookForManagerModel
 
 
 @section Head {
@@ -74,8 +74,8 @@
 		}
 
 
-		//создать бронь от менеджера
-		function create(){
+		//сохраняем отредактированную запись
+		function save(){
 			let zalId = Eid("zal").value;
 			let selectedDate = Eid("selectedDate").value;
 			let begintime = Eid("begintime").value;
@@ -97,14 +97,16 @@
 				return;
 			}
 
-			const url = "/data/CreateBookItemByManager";
+			const url = "/data/EditBookItemByManager";
+			const queryString = window.location.search;
 
 			const obj = {
 				Date: selectedDate,
 				Begintime: begintime,
 				Endtime: endtime,
 				SpaceId: zalId,
-				ClientId: clientId
+				ClientId: clientId,
+				Id: queryString.replace('?editId=','')
 			};
 
 			console.log(obj);
@@ -163,7 +165,7 @@
 
 <div class="card">
 	<div class="card-body">
-		<h4 class="card-title">Создать бронирование</h4>
+		<h4 class="card-title">Редактирование бронирования #@Model.Booking.Id</h4>
 
 
 
@@ -179,7 +181,13 @@
 							<option value="-1" selected>Выберите клиента из списка</option>
 							foreach (var u in Model.Clients)
 							{
-								<option value='@u.Id'>@u.Phone | @u.Username</option>
+								if(u.Id == Model.Booking.ClientId)
+								{
+									<option selected value='@u.Id'>@u.Phone | @u.Username</option>
+								}
+								else {
+									<option value='@u.Id'>@u.Phone | @u.Username</option>
+								}
 							}
 						}
 
@@ -193,7 +201,15 @@
 							<option value="-1" selected>Выберите зал из списка</option>
 							foreach (var s in Model.Spaces)
 							{
-								<option value='@s.Id'>@s.SpaceName</option>
+								if(s.Id == Model.Booking.SpaceId)
+								{
+									<option selected value='@s.Id'>@s.SpaceName</option>
+								}
+								else
+								{
+									<option value='@s.Id'>@s.SpaceName</option>
+								}
+
 							}
 						}
 
@@ -204,7 +220,7 @@
 				<div class="mb-3 row">
 					<div class="col-6">
 						<label for="formGroupExampleInput" class="form-label">Дата бронирования</label>
-						<input id="selectedDate" name="begin" type="date" class="form-control" onchange="GetBookTable()" placeholder="">
+						<input id="selectedDate" value="@Model.Booking.DtBegin.ToString("yyyy-MM-dd")" name="begin" type="date" class="form-control" onchange="GetBookTable()" placeholder="">
 					</div>
 				</div>
 
@@ -216,47 +232,57 @@
 					<div class="col-6">
 						<select id="begintime" name="endtime" class="form-select">
 
-							<option value="10">10:00</option>
-							<option value="11">11:00</option>
-							<option value="12">12:00</option>
-							<option value="13">13:00</option>
-							<option value="14">14:00</option>
+							@{
+								for(int t=10; t<=23; t++)
+								{
+									if(Model.Booking.DtBegin.Hour == t)
+									{
+										<option selected value="@t">@t:00</option>
+									}
+									else
+									{
+										<option value="@t">@t:00</option>
+									}
+								}
+							}
 
-
-							<option value="15">15:00</option>
-							<option value="16">16:00</option>
-							<option value="17">17:00</option>
-							<option value="18">18:00</option>
-							<option value="19">19:00</option>
-							<option value="20">20:00</option>
-							<option value="21">21:00</option>
-							<option value="22">22:00</option>
-							<option value="23">23:00</option>
+		
 						</select>
 					</div>
 					<div class="col-6">
 						<select id="endtime" name="endtime" class="form-select">
-							<option value="11">11:00</option>
-							<option value="12">12:00</option>
-							<option value="13">13:00</option>
-							<option value="14">14:00</option>
-							<option value="15">15:00</option>
-							<option value="16">16:00</option>
-							<option value="17">17:00</option>
-							<option value="18">18:00</option>
-							<option value="19">19:00</option>
-							<option value="20">20:00</option>
-							<option value="21">21:00</option>
-							<option value="22">22:00</option>
-							<option value="23">23:00</option>
-							<option value="0">00:00</option>
+
+							@{
+								for (int t = 10; t <= 23; t++)
+								{
+									if (Model.Booking.DtEnd.Hour == t)
+									{
+										<option selected value="@t">@t:00</option>
+									}
+									else
+									{
+										<option value="@t">@t:00</option>
+									}
+								}
+							}
+
+							@if (Model.Booking.DtEnd.Hour == 0)
+							{
+								<option selected value="0">00:00</option>
+							}
+							else
+							{
+								<option value="0">00:00</option>
+							}
+
 						</select>
 					</div>
 				</div>
 
 
 				<div style="text-align:right">
-					<button type="button" id="createbutton" onclick="create()" class="btn btn-primary">Создать</button>
+					<a href='@Url.Action("HomeForManager")' class="btn btn-outline-primary">Вернуться к списку</a>
+					<button type="button" id="createbutton" onclick="save()" class="btn btn-primary">Сохранить</button>
 
 				</div>
 				<br />

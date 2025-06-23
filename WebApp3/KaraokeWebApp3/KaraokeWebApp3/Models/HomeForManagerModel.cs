@@ -4,16 +4,11 @@ namespace KaraokeWebApp3.Models
 {
 	public class HomeForManagerModel
 	{
-		public List<BookItemDto> Bookings { get; set; }
+		public List<BookItemDto> FutureBookings { get; set; }
+
+		public List<BookItemDto> PastBookings { get; set; }
 		public List<User> Users { get; set; }
 
-		/*public string GetMonthName(int i)
-		{
-			if (i == 5)
-				return "Май";
-			else
-				return "-";
 
-		}*/
 	}
 }
